@@ -21,10 +21,19 @@ export default class Index extends Component {
     });
     if(value===0){
       // message
+      wx.redirectTo({
+        url:'../message/message',
+      })
     }else if(value===1){
       // forum
+      wx.redirectTo({
+        url:'../forum/forum',
+      })
     }else if(value===2){
       // mine
+      wx.redirectTo({
+        url:'../personal_center/personal_center',
+      })
     }
   }
   carManage() {
