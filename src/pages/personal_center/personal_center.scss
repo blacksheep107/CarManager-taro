@@ -1,0 +1,57 @@
+/* pages/personal_center/personal_center.wxss */
+.user_information{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  margin-top: 20px;
+}
+.user_text{
+  display: flex;
+  flex-flow: column wrap;
+  margin-left: 20px;
+}
+.car_text{
+  position: relative;
+  top: 6px;
+}
+.line{
+  background: #dddddd;
+  width: 100%;
+  height: 5rpx;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.namemessage{
+  font-weight: bold;
+  font-size: large;
+  width: 100px;
+}
+.id{
+  font-size: medium;
+  color: gray;
+  margin-top: 20px;
+  width: 100px;
+}
+.dudu{
+  position: absolute;
+  margin-left: 10px;
+  font-size: medium;
+  color: gray;
+  margin-top: 50px;
+  width: 100px;
+}
+.avator{
+  position: relative;
+  overflow: hidden;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin: 10px 20px;
+}
+.inpic{
+  position: relative;
+  margin-left: auto;
+  margin-right: 60px;
+
+}
