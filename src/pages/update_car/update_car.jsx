@@ -171,7 +171,7 @@ export default class Index extends Component {
           {/* <View class="form-control">
             <AtButton onClick={this.chooseImageTap.bind(this)}>上传图片</AtButton>
           </View> */}
-          <AtButton onClick={this.onSubmit.bind(this)}>提交</AtButton>
+          <AtButton type="primary" onClick={this.onSubmit.bind(this)}>提交</AtButton>
       </AtForm>
     )
   }

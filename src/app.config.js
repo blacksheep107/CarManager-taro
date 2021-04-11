@@ -6,6 +6,7 @@ export default {
     'pages/add_car/add_car',
     'pages/update_car/update_car',
     'pages/forum/forum',
+    'pages/message/message',
     'pages/index/index',
   ],
   window: {

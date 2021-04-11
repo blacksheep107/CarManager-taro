@@ -102,9 +102,10 @@ export default class Index extends Component {
         });
         console.log("Get storage success, store infomation:");
         console.log(res.data);
+        setGlobalData('userInfo',res.data);
       },
       fail:function(res){
-        // 没缓存，弹窗请求用户允许
+        // 没缓存
         console.log(res);
         if (wx.getUserProfile) {
           that.setState({
@@ -182,6 +183,7 @@ export default class Index extends Component {
           data: res.userInfo,
           key: 'userInfo',
         })
+        setGlobalData('userInfo',res.userInfo);
       }
     })
   }
@@ -206,7 +208,7 @@ export default class Index extends Component {
               <open-data type="userNickName"></open-data>      
             </View>
           </View>
-          <AtIcon className="inpic" value='chevron-right' size='50' color='black'></AtIcon>
+          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>
         <AtDivider />
         
@@ -216,7 +218,7 @@ export default class Index extends Component {
             <Text class="namemessage">车辆管理</Text>
             <Text class="id">嘟嘟嘟——</Text>
           </View>
-          <AtIcon className="inpic" value='chevron-right' size='50' color='black'></AtIcon>
+          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>
         <AtDivider />
         <AtTabBar

@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { View, Text,Image } from '@tarojs/components'
-import { AtButton,AtList, AtIcon,AtCard,AtTabBar,AtFloatLayout,AtFab,AtTextarea,AtImagePicker } from 'taro-ui'
+import { View, Text,Image, Icon } from '@tarojs/components'
+import { AtButton,AtList, AtIcon,AtCard,AtTabBar,AtFloatLayout,AtFab,AtTextarea,AtImagePicker,AtToast, AtListItem,AtDivider } from 'taro-ui'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './forum.scss'
@@ -8,7 +8,166 @@ import like from '/images/like.png'
 import comment from '/images/comment.png'
 import deletetrend from '/images/deletetrend.png'
 import {setGlobalData,getGlobalData} from '../globalData'
-
+class Trend extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      isCommentFloat:false,
+      isHide:false,
+      sendComment:'',
+      commentDisabled:true,
+    }
+  }
+  onDelete(id){
+    console.log(id);
+    wx.showModal({
+      title:'提示',
+      content:'确定删除这条动态？',
+      showCancel:true,
+      success:res=>{
+        if(res.confirm){
+          wx.request({
+            url:'https://qizong007.top/post/delete',
+            method:'POST',
+            data:{
+              postId:id
+            },
+            success:res=>{
+              console.log(res);
+              // repaint , change style
+              if(res.data.code==0){
+                this.setState({
+                  isHide:true
+                });
+              }
+            }
+          })
+        }
+      }
+    })
+  }
+  callCommentFloat(){
+    this.setState({
+      isCommentFloat:true,
+      sendComment:'',
+    });
+  }
+  sendCommentChange(e){
+    // e is content
+    this.state.sendComment=e;
+    let reg="^[ ]+$";
+    let re=new RegExp(reg);
+    if(re.test(this.state.sendTrend)||e==''){
+      this.setState({commentDisabled:true});
+    }else{
+      this.setState({commentDisabled:false});
+    }
+  }
+  deleteComment(id){
+    wx.showModal({
+      title:'提示',
+      content:'确定删除评论？',
+      showCancel:true,
+      success:res=>{
+        if(res.confirm){
+          wx.request({
+            url:'https://qizong007.top/comment/delete',
+            method:'POST',
+            data:{
+              commentId:id
+            },
+            success:res=>{
+              console.log(res);
+              // repaint needs to make comment a component
+            }
+          })
+        }
+      }
+    })
+  }
+  submitComment(item){
+    // no empty or all space
+    let info=getGlobalData('userInfo');
+    wx.request({
+      url:'https://qizong007.top/comment/publish',
+      method:'POST',
+      data:{
+        userId:getGlobalData('userid'),
+        postId:this.props.item.postId, // 帖子id
+        userName:info.nickName,
+        content:this.state.sendComment, // 帖子内容
+      },
+      success:res=>{
+        console.log(res);
+        if(res.data.code==0){
+          // success,close,don't know how to repaint
+          this.setState({
+            isCommentFloat:false,
+            successToast:true
+          });
+        }else{
+          // fail
+          this.setState({errorToast:true})
+        }
+      }
+    })
+  }
+  render(){
+    let that=this;
+    return (
+      <View>
+        {!this.state.isHide&&
+          <AtCard
+          className='card'
+          extra={this.props.item.postTime}
+          title={this.props.item.userName}
+          thumb={this.props.item.avatarUrl}
+        >
+          <Text className="content">
+            {this.props.item.content}
+          </Text>
+          <View className="bottomBar">
+            {this.props.userid==this.props.item.userId&&
+            <AtIcon value='trash' size='25' color='#78A4FA' className="delete"
+            onClick={this.onDelete.bind(this,that.props.item.postId)}
+            ></AtIcon>}
+            <AtIcon value='heart' size='25' color='#78A4FA' className="like"></AtIcon>
+            <AtIcon value='message' size='25' color='#78A4FA' className="comment" onClick={this.callCommentFloat.bind(this)}></AtIcon>
+          </View>
+          <View className='commentBlock'>
+            {this.props.item.comments.length>0&&
+              <AtList>
+                {
+                  this.props.item.comments.map((onecomment)=>{
+                    return(
+                      <View className="commentReal">
+                        <Text className="commentname">{onecomment.name}：</Text>
+                        <Text className="commentcontent">{onecomment.content}</Text> 
+                        {/* <AtIcon value='trash' size='15' color='#78A4FA' onClick={this.deleteComment.bind(onecomment.commentId)}></AtIcon> */}
+                        {/* 做的我心态崩了 */}
+                      </View>
+                    )
+                  })
+                }
+              </AtList>
+            }
+          </View>
+          <AtFloatLayout isOpened={this.state.isCommentFloat} title="发表评论">
+            <AtTextarea
+              value={this.state.sendComment}
+              onChange={this.sendCommentChange.bind(this)}
+              maxLength={200}
+              placeholder='说点什么吧...'
+            />
+            <AtButton type='primary' onClick={this.submitComment.bind(this)}
+            disabled={this.state.commentDisabled}>发表</AtButton>
+          </AtFloatLayout>
+        </AtCard>
+        }
+      </View>
+    )
+  }
+}
 export default class Index extends Component {
   componentWillMount () { }
 
@@ -29,7 +188,13 @@ export default class Index extends Component {
       userid:getGlobalData('userid'),
       current:1,
       isFloat:false,
-      sendTrend:''
+      isCommentFloat:false,
+      sendTrend:'',
+      sendComment:'',
+      submitDisabled:true,
+      commentDisabled:true,
+      errorToast:false,
+      successToast:false,
     }
   }
   onChange (files) {
@@ -45,8 +210,45 @@ export default class Index extends Component {
   }
   sendTrendChange(e){
     // e is content
+    this.state.sendTrend=e;
+    let reg="^[ ]+$";
+    let re=new RegExp(reg);
+    if(re.test(this.state.sendTrend)||e==''){
+      this.setState({submitDisabled:true});
+    }else{
+      this.setState({submitDisabled:false});
+    }
+  }
+  submitTrend(e){
     // no empty or all space
-
+    let info=getGlobalData('userInfo');
+    let that=this;
+    wx.request({
+      url:'https://qizong007.top/post/publish',
+      method:'POST',
+      data:{
+        userId:getGlobalData('userid'),
+        avatarUrl:info.avatarUrl,
+        userName:info.nickName,
+        content:this.state.sendTrend,
+        pictures:[]
+      },
+      success:res=>{
+        console.log(res);
+        if(res.data.code==0){
+          // success,close,repaint
+          this.setState({
+            isFloat:false,
+            successToast:true,
+            sendTrend:'',
+          });
+          this.onLoad();
+        }else{
+          // fail
+          this.setState({errorToast:true})
+        }
+      }
+    })
   }
   handleClick (value) {
     this.setState({
@@ -87,74 +289,24 @@ export default class Index extends Component {
       }
     });
   }
-  onDelete(e,id){
-    wx.showModal({
-      title:'提示',
-      content:'确定删除这条动态？',
-      showCancel:true,
-      success:res=>{
-        if(res.confirm){
-          wx.request({
-            url:'http://qizong007.top/post/delete',
-            method:'POST',
-            data:{
-              postId:id
-            },
-            success:res=>{
-              console.log('删除成功')
-              console.log(res);
-              // repaint
-              let temp=[];
-              for(let i=0;i<this.state.trends.length;i++){
-                if(this.state.trends[i].postId!=id){
-                  temp.push(this.state.trends[i]);
-                }
-              }
-              this.setState({
-                trends:temp,
-              });
-            }
-          })
-        }
-      }
-    })
-  }
   callFloat(){
     this.setState({
       isFloat:true,
+      successToast:false,
+      errorToast:false,
+      sendTrend:'',
     });
   }
+
   render () {
     const list=this.state.trends;
-    console.log(list);
     return (
       <View className='index'>
         <AtList>
           {list.map((item)=>{
             return (
-              <AtCard
-                className='card'
-                // note={item.postTime}
-                // renderIcon={
-                //   <Image src={car} />
-                // }
-                extra={item.postTime}
-                title={item.userName}
-                thumb='https://img2020.cnblogs.com/blog/1956720/202104/1956720-20210410185237404-1071619101.png'
-              >
-                <View className="content">
-                  {item.content}
-                </View>
-                <View className="bottomBar">
-                  {this.state.userid==item.userId&&
-                  <AtIcon value='trash' size='25' color='#78A4FA' className="delete"
-                  onClick={this.onDelete.bind(this,item.postId)}
-                  ></AtIcon>}
-                  <AtIcon value='heart' size='25' color='#78A4FA' className="like"></AtIcon>
-                  <AtIcon value='message' size='25' color='#78A4FA' className="comment"></AtIcon>
-                </View>
-              </AtCard>
-            )
+              <Trend item={item} userid={this.state.userid} />
+            );
           })}
         </AtList>
         <View className="fab">
@@ -177,8 +329,11 @@ export default class Index extends Component {
             onFail={this.onFail.bind(this)}
             onImageClick={this.onImageClick.bind(this)}
           />
-          <AtButton>发布</AtButton>
+          <AtButton type='primary' onClick={this.submitTrend.bind(this)}
+          disabled={this.state.submitDisabled}>发表</AtButton>
         </AtFloatLayout>
+        <AtToast isOpened={this.state.errorToast} status="error" text="发布失败"></AtToast>
+        <AtToast isOpened={this.state.successToast} status="success" text="发布成功"></AtToast>
         <AtTabBar
           fixed
           tabList={[
