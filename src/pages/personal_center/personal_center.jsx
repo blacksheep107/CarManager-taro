@@ -5,6 +5,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './personal_center.scss'
 import {setGlobalData,getGlobalData} from '../globalData'
 import carmanagement from "/images/carmanagement.png"
+
 export default class Index extends Component {
   constructor () {
     super(...arguments)
@@ -82,6 +83,9 @@ export default class Index extends Component {
   }
   onLoad (e) {
     let that=this;
+    wx.setEnableDebug({
+      enableDebug:true
+    })
     wx.login({
       success(res){
         if(res.code){

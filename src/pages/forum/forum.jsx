@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { View, Text,Image, Icon } from '@tarojs/components'
-import { AtButton,AtList, AtIcon,AtCard,AtTabBar,AtFloatLayout,AtFab,AtTextarea,AtImagePicker,AtToast, AtListItem,AtDivider } from 'taro-ui'
+import { View, Text,Image, Icon,ScrollView } from '@tarojs/components'
+import { AtButton,AtList, AtIcon,AtCard,AtTabBar,AtFloatLayout,AtFab,AtTextarea,AtImagePicker,AtToast, AtInput,AtDivider } from 'taro-ui'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './forum.scss'
@@ -8,14 +8,136 @@ import like from '/images/like.png'
 import comment from '/images/comment.png'
 import deletetrend from '/images/deletetrend.png'
 import {setGlobalData,getGlobalData} from '../globalData'
-class Trend extends Component{
+class CommentContent extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      comments:'',
+    }
+  }
+  render(){
+    return(
+      <View className='commentBlock'>
+        {this.props.item.comments.length>0&&
+          <AtList>
+            {
+              this.props.item.comments.map((onecomment)=>{
+                return(
+                  <View className="commentReal">
+                    <Text className="commentname">{onecomment.name}：</Text>
+                    <Text className="commentcontent">{onecomment.content}</Text> 
+                    {/* <AtIcon value='trash' size='15' color='#78A4FA' onClick={this.deleteComment.bind(onecomment.commentId)}></AtIcon> */}
+                    {/* 做的我心态崩了 */}
+                  </View>
+                )
+              })
+            }
+          </AtList>
+        }
+      </View>
+    )
+  }
+}
+class Comment extends Component{
   constructor(props){
     super(props);
     this.state={
       isCommentFloat:false,
-      isHide:false,
       sendComment:'',
       commentDisabled:true,
+    }
+  }
+  callCommentFloat(id){
+    this.setState({
+      isCommentFloat:true,
+      sendComment:'',
+    });
+  }
+  sendCommentChange(id,e){
+    // e is content
+    // console.log(id+' '+e);
+    this.state.sendComment=e;
+    let reg="^[ ]+$";
+    let re=new RegExp(reg);
+    if(re.test(e)||e==''){
+      this.setState({commentDisabled:true});
+    }else{
+      this.setState({commentDisabled:false});
+    }
+  }
+  deleteComment(id){
+    wx.showModal({
+      title:'提示',
+      content:'确定删除评论？',
+      showCancel:true,
+      success:res=>{
+        if(res.confirm){
+          wx.request({
+            url:'https://qizong007.top/comment/delete',
+            method:'POST',
+            data:{
+              commentId:id
+            },
+            success:res=>{
+              console.log(res);
+              // repaint needs to make comment a component
+            }
+          })
+        }
+      }
+    })
+  }
+  submitComment(id){
+    console.log(id);
+    // no empty or all space
+    let info=getGlobalData('userInfo');
+    wx.request({
+      url:'https://qizong007.top/comment/publish',
+      method:'POST',
+      data:{
+        userId:getGlobalData('userid'),
+        postId:this.props.item.postId, // 帖子id
+        userName:info.nickName,
+        content:this.state.sendComment, // 帖子内容
+      },
+      success:res=>{
+        console.log(res);
+        if(res.data.code==0){
+          // success,close,don't know how to repaint
+          this.setState({
+            // isCommentFloat:false,
+            sendComment:'',
+            commentDisabled:true,
+          });
+        }
+      }
+    })
+  }
+  render(){
+    return(
+      <View className='inputAndComment'>
+        <CommentContent item={this.props.item} />
+        <View className='commentView'>
+          <AtInput className='commentFixed'
+            name={this.props.item.postId}
+            title='评论'
+            type='text'
+            placeholder='说点什么吧...'
+            value={this.state.sendComment}
+            onChange={this.sendCommentChange.bind(this,this.props.item.postId)}
+          />
+          <AtButton type='secondary' onClick={this.submitComment.bind(this,this.props.item.postId)} disabled={this.state.commentDisabled}>发表</AtButton>
+        </View>        
+      </View>
+
+    )
+  }
+}
+class Trend extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      isHide:false,
     }
   }
   onDelete(id){
@@ -46,72 +168,6 @@ class Trend extends Component{
       }
     })
   }
-  callCommentFloat(){
-    this.setState({
-      isCommentFloat:true,
-      sendComment:'',
-    });
-  }
-  sendCommentChange(e){
-    // e is content
-    this.state.sendComment=e;
-    let reg="^[ ]+$";
-    let re=new RegExp(reg);
-    if(re.test(this.state.sendTrend)||e==''){
-      this.setState({commentDisabled:true});
-    }else{
-      this.setState({commentDisabled:false});
-    }
-  }
-  deleteComment(id){
-    wx.showModal({
-      title:'提示',
-      content:'确定删除评论？',
-      showCancel:true,
-      success:res=>{
-        if(res.confirm){
-          wx.request({
-            url:'https://qizong007.top/comment/delete',
-            method:'POST',
-            data:{
-              commentId:id
-            },
-            success:res=>{
-              console.log(res);
-              // repaint needs to make comment a component
-            }
-          })
-        }
-      }
-    })
-  }
-  submitComment(item){
-    // no empty or all space
-    let info=getGlobalData('userInfo');
-    wx.request({
-      url:'https://qizong007.top/comment/publish',
-      method:'POST',
-      data:{
-        userId:getGlobalData('userid'),
-        postId:this.props.item.postId, // 帖子id
-        userName:info.nickName,
-        content:this.state.sendComment, // 帖子内容
-      },
-      success:res=>{
-        console.log(res);
-        if(res.data.code==0){
-          // success,close,don't know how to repaint
-          this.setState({
-            isCommentFloat:false,
-            successToast:true
-          });
-        }else{
-          // fail
-          this.setState({errorToast:true})
-        }
-      }
-    })
-  }
   render(){
     let that=this;
     return (
@@ -132,27 +188,11 @@ class Trend extends Component{
             onClick={this.onDelete.bind(this,that.props.item.postId)}
             ></AtIcon>}
             <AtIcon value='heart' size='25' color='#78A4FA' className="like"></AtIcon>
-            <AtIcon value='message' size='25' color='#78A4FA' className="comment" onClick={this.callCommentFloat.bind(this)}></AtIcon>
+            <AtIcon value='message' size='25' color='#78A4FA' className="comment"></AtIcon>
           </View>
-          <View className='commentBlock'>
-            {this.props.item.comments.length>0&&
-              <AtList>
-                {
-                  this.props.item.comments.map((onecomment)=>{
-                    return(
-                      <View className="commentReal">
-                        <Text className="commentname">{onecomment.name}：</Text>
-                        <Text className="commentcontent">{onecomment.content}</Text> 
-                        {/* <AtIcon value='trash' size='15' color='#78A4FA' onClick={this.deleteComment.bind(onecomment.commentId)}></AtIcon> */}
-                        {/* 做的我心态崩了 */}
-                      </View>
-                    )
-                  })
-                }
-              </AtList>
-            }
-          </View>
-          <AtFloatLayout isOpened={this.state.isCommentFloat} title="发表评论">
+          <Comment item={this.props.item} />
+          {/* 有滚动穿透问题+键盘遮盖输入框问题，不会解决，非常无语 */}
+          {/* <AtFloatLayout isOpened={this.state.isCommentFloat} title="发表评论">
             <AtTextarea
               value={this.state.sendComment}
               onChange={this.sendCommentChange.bind(this)}
@@ -161,7 +201,7 @@ class Trend extends Component{
             />
             <AtButton type='primary' onClick={this.submitComment.bind(this)}
             disabled={this.state.commentDisabled}>发表</AtButton>
-          </AtFloatLayout>
+          </AtFloatLayout> */}
         </AtCard>
         }
       </View>
@@ -188,11 +228,8 @@ export default class Index extends Component {
       userid:getGlobalData('userid'),
       current:1,
       isFloat:false,
-      isCommentFloat:false,
       sendTrend:'',
-      sendComment:'',
       submitDisabled:true,
-      commentDisabled:true,
       errorToast:false,
       successToast:false,
     }
@@ -292,6 +329,7 @@ export default class Index extends Component {
   callFloat(){
     this.setState({
       isFloat:true,
+      isCommentFloat:false,
       successToast:false,
       errorToast:false,
       sendTrend:'',
@@ -301,7 +339,7 @@ export default class Index extends Component {
   render () {
     const list=this.state.trends;
     return (
-      <View className='index'>
+      <View scrollY scrollWithAnimation className='index'>
         <AtList>
           {list.map((item)=>{
             return (
@@ -319,6 +357,7 @@ export default class Index extends Component {
             value={this.state.sendTrend}
             onChange={this.sendTrendChange.bind(this)}
             maxLength={200}
+            cursorSpacing={400}
             placeholder='分享新鲜事...'
           />
             <AtImagePicker
