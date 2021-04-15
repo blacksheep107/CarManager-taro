@@ -21,7 +21,6 @@ export default class Index extends Component {
     // this.setState({carInfo:getGlobalData('carInfo')});
   }
   componentDidShow(){
-    console.log('onShow');
     this.setState({carInfo:getGlobalData('carInfo')});
   }
   addCar(){
@@ -66,12 +65,15 @@ export default class Index extends Component {
                     }
                   })
                   setGlobalData('carInfo',newinfo);
-                  that.state.carInfo=newinfo;
+                  that.setState({
+                    carInfo:newinfo
+                  });
+                  // that.state.carInfo=newinfo;
                   resolve();
                 }
               ).then(
                 (res)=>{
-                  this.componentDidShow();
+                  //this.componentDidShow();
                 }
               )
             },
@@ -104,7 +106,15 @@ export default class Index extends Component {
                     {
                       JSON.stringify(item.pictures)==='[]'?
                       <Text>没图</Text> :
-                      <Image src={car}></Image>
+                      <View className="cars">
+                        {
+                          item.pictures.map((carpic)=>{
+                            return (
+                              <Image className="onecar" src={carpic.picture} />
+                            )
+                          })
+                        }
+                      </View>
                     }
                     <View className="at-row">
                       <AtButton size="small" onClick={this.updateCar.bind(this,item)}>修改车辆</AtButton>

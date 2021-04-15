@@ -168,6 +168,15 @@ class Trend extends Component{
       }
     })
   }
+  previewImg(i){
+    console.log(i)
+    console.log(this.props);
+    let that=this;
+    wx.previewImage({
+      current:i,
+      urls:this.props.item.pictures,
+    })
+  }
   render(){
     let that=this;
     return (
@@ -182,6 +191,18 @@ class Trend extends Component{
           <Text className="content">
             {this.props.item.content}
           </Text>
+          <View className="imgs">
+            {
+              this.props.item.pictures.map((i)=>{
+                return (
+                  <Image src={i} 
+                  onClick={this.previewImg.bind(this,i)} 
+                  data-src={i}
+                  className="oneImage" />
+                )
+              })
+            }
+          </View>
           <View className="bottomBar">
             {this.props.userid==this.props.item.userId&&
             <AtIcon value='trash' size='25' color='#78A4FA' className="delete"
@@ -209,15 +230,6 @@ class Trend extends Component{
   }
 }
 export default class Index extends Component {
-  componentWillMount () { }
-
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
   constructor(props){
     super(props);
     this.getTrends=this.getTrends.bind(this);
@@ -256,6 +268,15 @@ export default class Index extends Component {
       this.setState({submitDisabled:false});
     }
   }
+  // onLoad(){
+  //   this.getTrends();
+  // }
+  componentDidShow(){
+    this.getTrends();
+  }
+  componentWillMount(){
+    this.getTrends();
+  }
   submitTrend(e){
     // no empty or all space
     let info=getGlobalData('userInfo');
@@ -279,7 +300,6 @@ export default class Index extends Component {
             successToast:true,
             sendTrend:'',
           });
-          this.onLoad();
         }else{
           // fail
           this.setState({errorToast:true})
@@ -308,9 +328,6 @@ export default class Index extends Component {
       })
     }
   }
-  onLoad(){
-    this.getTrends();
-  }
   getTrends(){
     wx.request({
       url:'https://qizong007.top/post/getTen',
@@ -335,9 +352,14 @@ export default class Index extends Component {
       sendTrend:'',
     });
   }
-
+  gotoAddTrend(){
+    wx.navigateTo({
+      url:'../add_trend/add_trend',
+    })
+  }
   render () {
     const list=this.state.trends;
+    console.log(list);
     return (
       <View scrollY scrollWithAnimation className='index'>
         <AtList>
@@ -348,11 +370,11 @@ export default class Index extends Component {
           })}
         </AtList>
         <View className="fab">
-          <AtFab onClick={this.callFloat.bind(this)}>
+          <AtFab onClick={this.gotoAddTrend.bind(this)}>
             <Text className='at-fab__icon at-icon at-icon-add'></Text>
           </AtFab>          
         </View>
-        <AtFloatLayout isOpened={this.state.isFloat} title="发表动态">
+        {/* <AtFloatLayout isOpened={this.state.isFloat} title="发表动态">
           <AtTextarea
             value={this.state.sendTrend}
             onChange={this.sendTrendChange.bind(this)}
@@ -370,7 +392,7 @@ export default class Index extends Component {
           />
           <AtButton type='primary' onClick={this.submitTrend.bind(this)}
           disabled={this.state.submitDisabled}>发表</AtButton>
-        </AtFloatLayout>
+        </AtFloatLayout> */}
         <AtToast isOpened={this.state.errorToast} status="error" text="发布失败"></AtToast>
         <AtToast isOpened={this.state.successToast} status="success" text="发布成功"></AtToast>
         <AtTabBar

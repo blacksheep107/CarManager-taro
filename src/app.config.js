@@ -7,6 +7,7 @@ export default {
     'pages/update_car/update_car',
     'pages/forum/forum',
     'pages/message/message',
+    'pages/add_trend/add_trend',
     'pages/index/index',
   ],
   window: {

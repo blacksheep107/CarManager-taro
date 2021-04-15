@@ -105,3 +105,11 @@
 // .at-button--primary{
 
 // }
+.imgs{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.oneImage{
+  height: 200rpx;
+  width: 200rpx;
+}

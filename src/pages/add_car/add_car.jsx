@@ -26,7 +26,7 @@ export default class Index extends Component {
       type:0,
       brand:'',
       color:'',
-      imgs:[],
+      images:[],
       files: [],
     }
   }
@@ -59,18 +59,6 @@ export default class Index extends Component {
         });
       }
     })
-  }
-  upImgs(imgurl,index){
-    let that=this;
-    // wx.uploadFile({
-    //   filePath: 'imgurl',
-    //   name: 'file',
-    //   url: 'url',
-    //   success:res=>{
-    //     console.log(res);
-    //     let data=JSON.parse(res.data);
-    //   }
-    // })
   }
   typeChange(value){
     this.setState({type:value})
@@ -108,62 +96,75 @@ export default class Index extends Component {
     }
   }
   addToServer(){
-    wx.request({
-      url: 'https://qizong007.top/vehicle/create',
-      method:'POST',
-      data:{
-        type:this.state.type,
-        licensePlate:this.state.carnum,
-        brand:this.state.brand,
-        color:this.state.color,
-        carOwnerId:getGlobalData('userid'),
-        pictures:[], //空 图片放另一个上传
-      },
-      success:res=>{
-        // uploadFiles上传图片
-        
-        // update global vehicles, carInfo
-        // setGlobalData('vehicles',) 
-        // 渲染有问题，要重新进才会有，因为放到login里去了，等后端更新返回数据增加vehicleId
-        console.log(res);
-        // repaint
-        let that=this;
-        wx.request({
-          url:'https://qizong007.top/vehicle/findById',
-          method:'GET',
-          data:{
-            vehicleId:res.data.data.vehicleId
-          },
+    let promiseArr=[];
+    let info=getGlobalData('userInfo');
+    this.state.files.forEach((item)=>{
+      let a=new Promise((resolve,reject)=>{
+        wx.uploadFile({
+          url:'https://qizong007.top/picture/upload',
+          filePath:item.url,
+          name:'picture',
           success:res=>{
-            new Promise(
-              function(resolve,reject){
-                let newinfo=getGlobalData('carInfo');
-                newinfo.push({
-                  vehicleid:res.data.data.vehicleId,
-                  type:res.data.data.type==0?'汽车':'电动车',
-                  licensePlate:res.data.data.licensePlate,
-                  color:res.data.data.color,
-                  brand:res.data.data.brand,
-                  pictures:res.data.data.pictures
-                })
-                setGlobalData('carInfo',newinfo);
-                resolve();
-              }
-            ).then(
-              (res)=>{
-                wx.navigateBack();
-                // wx.navigateTo({
-                //   url:'../car_manage/car_manage'
-                // })
-              }
-            )            
+            console.log(res);
+            this.state.images.push(JSON.parse(res.data).data.url);
+            resolve();
           }
         })
-      },
-      fail:res=>{
-        console.log(res);
-      }
-    });  
+      });
+      promiseArr.push(a);
+    })
+    Promise.all(promiseArr).then(()=>{
+      console.log(this.state.images);
+      wx.request({
+        url: 'https://qizong007.top/vehicle/create',
+        method:'POST',
+        data:{
+          type:this.state.type,
+          licensePlate:this.state.carnum,
+          brand:this.state.brand,
+          color:this.state.color,
+          carOwnerId:getGlobalData('userid'),
+          pictures:this.state.images, 
+        },
+        success:res=>{
+          console.log(res);
+          // repaint
+          let that=this;
+          wx.request({
+            url:'https://qizong007.top/vehicle/findById',
+            method:'GET',
+            data:{
+              vehicleId:res.data.data.vehicleId
+            },
+            success:res=>{
+              new Promise(
+                function(resolve,reject){
+                  let newinfo=getGlobalData('carInfo');
+                  newinfo.push({
+                    vehicleid:res.data.data.vehicleId,
+                    type:res.data.data.type==0?'汽车':'电动车',
+                    licensePlate:res.data.data.licensePlate,
+                    color:res.data.data.color,
+                    brand:res.data.data.brand,
+                    pictures:res.data.data.pictures
+                  })
+                  setGlobalData('carInfo',newinfo);
+                  resolve();
+                }
+              ).then(
+                (res)=>{
+                  wx.navigateBack();
+                }
+              )            
+            }
+          })
+        },
+        fail:res=>{
+          console.log(res);
+        }
+      });        
+    })
+
   }
   onChange (files) {
     this.setState({
@@ -227,9 +228,6 @@ export default class Index extends Component {
             onFail={this.onFail.bind(this)}
             onImageClick={this.onImageClick.bind(this)}
           />
-          {/* <View class="form-control">
-            <AtButton onClick={this.chooseImageTap.bind(this)}>上传图片</AtButton>
-          </View> */}
           <AtButton type="primary" onClick={this.onSubmit.bind(this)}>提交</AtButton>
       </AtForm>
     )

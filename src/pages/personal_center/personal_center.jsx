@@ -122,6 +122,7 @@ export default class Index extends Component {
   getCarInfo(){
     let that=this;
     let vehicles=getGlobalData('vehicles');
+    let carInfo=[];
     vehicles.forEach(function(item){
       wx.request({
         url: 'https://qizong007.top/vehicle/findById',
@@ -132,7 +133,6 @@ export default class Index extends Component {
         success:res=>{
           let type="汽车";
           if(res.data.data.type==="1")  type="电动车";
-          let carInfo=getGlobalData('carInfo');
           carInfo.push({
             "vehicleid":item,
             "type":type,
