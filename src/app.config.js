@@ -11,6 +11,9 @@ export default {
     'pages/message_detail/message_detail',
     'pages/camera/camera',
     'pages/findcar/findcar',
+    'pages/friend/friend',
+    'pages/addfriend/addfriend',
+
     'pages/index/index',
   ],
   window: {
@@ -18,5 +21,10 @@ export default {
     navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black'
-  }
+  },
+  "permission":{
+    "scope.userLocation":{
+      "desc":'你的位置信息将用于小程序订阅消息通知'
+    }
+  },
 }

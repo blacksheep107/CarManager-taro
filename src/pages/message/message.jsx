@@ -12,12 +12,19 @@ class MessageBox extends Component{
 
     }
   }
+  jumpToDetail(e){
+    wx.navigateTo({
+      url:'../message_detail/message_detail?receiverId='+this.props.item.receiverId,
+    });
+  }
   render(){
     console.log(this.props);
     return(
       <View>
         <AtListItem
           title={this.props.item.receiverId}
+          thumb={this.props.item.avatarUrl}
+          onClick={this.jumpToDetail.bind(this)}
         />
       </View>
     )
@@ -52,16 +59,20 @@ export default class Index extends Component {
       current: value
     });
     if(value===0){
+      wx.redirectTo({
+        url:'../camera/camera',
+      })
+    }else if(value===1){
       // message
       wx.redirectTo({
         url:'../message/message',
       })
-    }else if(value===1){
+    }else if(value===2){
       // forum
       wx.redirectTo({
         url:'../forum/forum',
       })
-    }else if(value===2){
+    }else if(value===3){
       // mine
       wx.redirectTo({
         url:'../personal_center/personal_center',

@@ -178,6 +178,14 @@ export default class Index extends Component {
     // })
     this.carManage();
   }
+  getFriend(e){
+    if(!this.state.hasUserInfo){
+      this.getUserProfile(e);
+    }
+    wx.navigateTo({
+      url:'../friend/friend',
+    })
+  }
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
     // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
@@ -249,7 +257,8 @@ export default class Index extends Component {
         <AtDivider />
         
         <View class="user_information" onClick={this.getInfo.bind(this)}>
-          <Image class="avator" src={carmanagement}></Image>
+        <AtIcon className="avator" value='settings' size='60' color='#78A4FA'></AtIcon>
+          {/* <Image class="avator" src={carmanagement}></Image> */}
           <View class="user_text">
             <Text class="namemessage">车辆管理</Text>
             <Text class="id">嘟嘟嘟——</Text>
@@ -257,8 +266,9 @@ export default class Index extends Component {
           <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>
         <AtDivider />
-        <View class="user_information" onClick={this.getInfo.bind(this)}>
-          <Image class="avator" src={carmanagement}></Image>
+        <View class="user_information" onClick={this.getFriend.bind(this)}>
+        <AtIcon className="avator" value='phone' size='60' color='#78A4FA'></AtIcon>
+          {/* <Image class="avator" src={carmanagement}></Image> */}
           <View class="user_text">
             <Text class="namemessage">好友管理</Text>
             <Text class="id">点击添加好友</Text>
