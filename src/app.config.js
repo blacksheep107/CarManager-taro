@@ -8,6 +8,9 @@ export default {
     'pages/forum/forum',
     'pages/message/message',
     'pages/add_trend/add_trend',
+    'pages/message_detail/message_detail',
+    'pages/camera/camera',
+    'pages/findcar/findcar',
     'pages/index/index',
   ],
   window: {

@@ -10,8 +10,9 @@ export default class Index extends Component {
   constructor () {
     super(...arguments)
     this.state = {
-      current: 2,
+      current: 3,
       userInfo: {},
+      userId:"",
       hasUserInfo: false,
       canIUseGetUserProfile: false,
     }
@@ -21,16 +22,21 @@ export default class Index extends Component {
       current: value
     });
     if(value===0){
+      // camera
+      wx.redirectTo({
+        url:'../camera/camera',
+      })
+    }else if(value===1){
       // message
       wx.redirectTo({
         url:'../message/message',
       })
-    }else if(value===1){
+    }else if(value===2){
       // forum
       wx.redirectTo({
         url:'../forum/forum',
       })
-    }else if(value===2){
+    }else if(value===3){
       // mine
       wx.redirectTo({
         url:'../personal_center/personal_center',
@@ -58,6 +64,9 @@ export default class Index extends Component {
         },
         success:res=>{
           setGlobalData('userid',res.data.data.userId);
+          this.setState({
+            userId:res.data.data.userId
+          })
           resolve(res);
         }
       });      
@@ -97,6 +106,7 @@ export default class Index extends Component {
         }
       }
     });
+
     wx.getStorage({
       key: 'userInfo',
       success:function(res){
@@ -156,11 +166,30 @@ export default class Index extends Component {
     if(!this.state.hasUserInfo){
       this.getUserProfile(e);
     }
+    // wx.getSetting({
+    //   withSubscriptions: true,
+    //   success (res) {
+    //     // console.log(res.authSetting);
+    //     console.log(res.subscriptionsSetting);
+    //     if(res.subscriptionsSetting.mainSwitch===false){
+          
+    //     }
+    //   }
+    // })
     this.carManage();
   }
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
     // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
+    wx.requestSubscribeMessage({
+      tmplIds: ['9ovqmwinU6Rhpgs4mxZtFCZxmtQ2CcPwbomgYUnqcsA'],
+      success (res) { 
+        console.log(res);
+      },
+      fail:res=>{
+        console.log(res);
+      }
+    });
     wx.getUserProfile({
       desc: '用于完善用户体验', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
@@ -211,6 +240,9 @@ export default class Index extends Component {
             <View class="namemessage">
               <open-data type="userNickName"></open-data>      
             </View>
+            <View>
+              <Text>UserId: {this.state.userId}</Text>
+            </View>
           </View>
           <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>
@@ -225,12 +257,21 @@ export default class Index extends Component {
           <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>
         <AtDivider />
+        <View class="user_information" onClick={this.getInfo.bind(this)}>
+          <Image class="avator" src={carmanagement}></Image>
+          <View class="user_text">
+            <Text class="namemessage">好友管理</Text>
+            <Text class="id">点击添加好友</Text>
+          </View>
+          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
+        </View>
         <AtTabBar
           fixed
           tabList={[
+            { title: '找车', iconType: 'camera'},
             { title: '消息', iconType: 'message'},
             { title: '论坛', iconType: 'streaming' },
-            { title: '我的', iconType: 'user'}
+            { title: '我的', iconType: 'user'},
           ]}
           onClick={this.handleClick.bind(this)}
           current={this.state.current}

@@ -1,6 +1,6 @@
 export default {
   usingComponents: {},
-  navigationBarTitleText: "消息",
+  navigationBarTitleText: "找车",
   navigationBarTextStyle: "white",
   navigationBarBackgroundColor: "#78A4FA"
 }
