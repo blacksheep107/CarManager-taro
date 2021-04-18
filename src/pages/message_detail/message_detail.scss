@@ -1,0 +1,37 @@
+.leftmessage{
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 20rpx;
+  margin-right: auto;
+}
+.rightmessage{
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 20rpx;
+  margin-left: auto;
+}
+.nameAndContent{
+  display: flex;
+  flex-direction: column;
+  margin: 20rpx;
+  margin-top: 0;
+}
+.leftcontentContainer{
+  background-color: #f0f0f0;
+  border-radius: 0 0.8em 0.8em 0.8em;
+  padding: 20rpx;
+  margin-top: 10rpx;
+}
+.rightcontentContainer{
+  background-color: #f0f0f0;
+  border-radius: 0.8em 0 0.8em 0.8em;
+  padding: 20rpx;
+  margin-top: 10rpx;
+}
+.content{
+}
+.onemessage{
+  margin: 20rpx;
+}

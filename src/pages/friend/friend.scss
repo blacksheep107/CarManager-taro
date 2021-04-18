@@ -1,0 +1,31 @@
+.onefriend{
+  display: flex;
+  flex-direction: row;
+  margin: 50rpx;
+}
+.nickname{
+  font-size: large;
+  font-weight: bold;
+  margin-left: 20rpx;
+  justify-self: center;
+  align-self: center;
+}
+.at-avatar{
+  width: 130rpx;
+  height: 130rpx;
+  color: #FFF;
+  font-size: 40rpx;
+  line-height: 100rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  background: #E5E5E5;
+  -webkit-box-shadow: 0 0 50rpx 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 50rpx 0 rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+.deleteicon{
+  margin-right: 20rpx;
+  margin-left: auto;
+  justify-self: center;
+  align-self: center;
+}

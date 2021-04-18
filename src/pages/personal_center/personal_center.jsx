@@ -13,6 +13,7 @@ export default class Index extends Component {
       current: 3,
       userInfo: {},
       userId:"",
+      isnewUser:false,
       hasUserInfo: false,
       canIUseGetUserProfile: false,
     }
@@ -67,6 +68,9 @@ export default class Index extends Component {
           this.setState({
             userId:res.data.data.userId
           })
+          if(res.data.data.hasRegistered===false){
+            isnewUser=true;
+          }
           resolve(res);
         }
       });      
@@ -92,13 +96,13 @@ export default class Index extends Component {
   }
   onLoad (e) {
     let that=this;
-    wx.setEnableDebug({
-      enableDebug:true
-    })
+    // wx.setEnableDebug({
+    //   enableDebug:true
+    // })
     wx.login({
       success(res){
         if(res.code){
-          console.log(res.code);
+          // console.log(res.code);
           that.codePostServer(res).then((res)=>{
             console.log(res);
             that.codeGetDetailInfo(res);
@@ -106,7 +110,6 @@ export default class Index extends Component {
         }
       }
     });
-
     wx.getStorage({
       key: 'userInfo',
       success:function(res){
@@ -208,7 +211,7 @@ export default class Index extends Component {
             userId:getGlobalData('userid'),
             userName:res.userInfo.nickName,
             avatarUrl:res.userInfo.avatarUrl,
-            relatives:[],
+            relatives:getGlobalData('relatives'),
           },
           success:res=>{
             console.log(res);

@@ -16,12 +16,13 @@ class CommentContent extends Component{
     }
   }
   render(){
+    let allcomment=this.props.item.comments.concat(this.props.newcomments);
     return(
       <View className='commentBlock'>
-        {this.props.item.comments.length>0&&
+        {allcomment.length>0&&
           <AtList>
             {
-              this.props.item.comments.map((onecomment)=>{
+              allcomment.map((onecomment)=>{
                 return(
                   <View className="commentReal">
                     <Text className="commentname">{onecomment.name}：</Text>
@@ -45,6 +46,7 @@ class Comment extends Component{
       isCommentFloat:false,
       sendComment:'',
       commentDisabled:true,
+      newcomments:[],
     }
   }
   callCommentFloat(id){
@@ -79,7 +81,7 @@ class Comment extends Component{
               commentId:id
             },
             success:res=>{
-              console.log(res);
+              // console.log(res);
               // repaint needs to make comment a component
             }
           })
@@ -88,7 +90,7 @@ class Comment extends Component{
     })
   }
   submitComment(id){
-    console.log(id);
+    // console.log(id);
     // no empty or all space
     let info=getGlobalData('userInfo');
     wx.request({
@@ -98,16 +100,24 @@ class Comment extends Component{
         userId:getGlobalData('userid'),
         postId:this.props.item.postId, // 帖子id
         userName:info.nickName,
-        content:this.state.sendComment, // 帖子内容
+        content:this.state.sendComment, // 评论内容
       },
       success:res=>{
-        console.log(res);
-        if(res.data.code==0){
+        // console.log(res);
+        if(res.data.code===0){
           // success,close,don't know how to repaint
+          let temp=this.state.newcomments;
+          temp.push({
+            commentId:res.data.data.commentId,
+            userId:getGlobalData('userid'),
+            name:info.nickName,
+            content:this.state.sendComment,
+          });
           this.setState({
             // isCommentFloat:false,
             sendComment:'',
             commentDisabled:true,
+            newcomments:temp,
           });
         }
       }
@@ -116,7 +126,7 @@ class Comment extends Component{
   render(){
     return(
       <View className='inputAndComment'>
-        <CommentContent item={this.props.item} />
+        <CommentContent item={this.props.item} newcomments={this.state.newcomments} />
         <View className='commentView'>
           <AtInput className='commentFixed'
             name={this.props.item.postId}
@@ -141,7 +151,7 @@ class Trend extends Component{
     }
   }
   onDelete(id){
-    console.log(id);
+    // console.log(id);
     wx.showModal({
       title:'提示',
       content:'确定删除这条动态？',
@@ -177,6 +187,11 @@ class Trend extends Component{
       urls:this.props.item.pictures,
     })
   }
+  // commentChange(comments){
+  //   this.setState({
+
+  //   })
+  // }
   render(){
     let that=this;
     return (
@@ -342,6 +357,7 @@ export default class Index extends Component {
       },
       success:res=>{
         console.log(res);
+        this.state.count++;
         this.setState({
           trends:res.data.data,
         })
@@ -362,9 +378,24 @@ export default class Index extends Component {
       url:'../add_trend/add_trend',
     })
   }
+  onReachBottom(){
+    wx.request({
+      url:'https://qizong007.top/post/getTen',
+      method:'GET',
+      data:{
+        times:this.state.count
+      },
+      success:res=>{
+        this.state.count++;
+        // this.state.trends.push(res.data.data);
+        this.setState({
+          trends:this.state.trends.concat(res.data.data)
+        })
+      }
+    })
+  }
   render () {
     const list=this.state.trends;
-    console.log(list);
     return (
       <View scrollY scrollWithAnimation className='index'>
         <AtList>
@@ -400,6 +431,7 @@ export default class Index extends Component {
         </AtFloatLayout> */}
         <AtToast isOpened={this.state.errorToast} status="error" text="发布失败"></AtToast>
         <AtToast isOpened={this.state.successToast} status="success" text="发布成功"></AtToast>
+        <View className='nothing'></View>
         <AtTabBar
           fixed
           tabList={[

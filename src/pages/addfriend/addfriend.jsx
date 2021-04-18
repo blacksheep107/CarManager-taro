@@ -14,7 +14,7 @@ export default class Index extends Component {
       nickName:'',
       id:undefined,
       newFriendId:undefined,
-      relatives:getGlobalData('userInfo').relatives,
+      relatives:getGlobalData('relatives'),
     }
   }
   find(id){
@@ -48,16 +48,27 @@ export default class Index extends Component {
     });
   }
   addFriend(){
-    if(this.state.newFriendId===getGlobalData('userid')){
+    let flag=true;
+    for(let i=0;i<this.state.relatives.length;i++){
+        if(this.state.relatives[i]===this.state.newFriendId){
+          flag=false;
+          wx.showModal({
+            title:'提示',
+            content:'请勿重复添加好友！',
+            showCancel:false,
+          });
+          break;
+        }
+    }
+    if(flag&&this.state.newFriendId===getGlobalData('userid')){
       wx.showModal({
         title:'提示',
         content:'不能添加自己为好友！',
         showCancel:false,
       })
-    }else{
+    }else if(flag){
       let newinfo=getGlobalData('relatives');
       newinfo.push(this.state.newFriendId);
-      setGlobalData('relatives',newinfo);
       wx.request({
         url:'https://qizong007.top/user/updateInfo',
         method:'POST',
@@ -69,6 +80,19 @@ export default class Index extends Component {
         },
         success:res=>{
           console.log(res);
+          setGlobalData('relatives',newinfo);
+          wx.showModal({
+            title:'提示',
+            content:'添加成功！',
+            showCancel:false,
+            success:res=>{
+              if(res.confirm){
+                wx.reLaunch({
+                  url:'../friend/friend'
+                });
+              }
+            }
+          });
         },
         fail:res=>{
           console.log(res);
@@ -92,10 +116,10 @@ export default class Index extends Component {
           <AtButton onClick={this.find.bind(this)}>查找</AtButton>     
         </View>
         <View className='friend'>
-          <AtAvatar image={this.state.avatarUrl} />
-          <Text>{this.state.nickName}</Text>
-          <AtButton onClick={this.addFriend.bind(this)}>确定添加</AtButton>
+          <AtAvatar image={this.state.avatarUrl} size='large'/>
+          <Text className='nickname'>{this.state.nickName}</Text>
         </View>
+              <AtButton onClick={this.addFriend.bind(this)} className='addbutton'>确定添加</AtButton>
       </View>
     )
   }

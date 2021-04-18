@@ -18,11 +18,10 @@ class MessageBox extends Component{
     });
   }
   render(){
-    console.log(this.props);
     return(
       <View>
         <AtListItem
-          title={this.props.item.receiverId}
+          title={this.props.item.userName}
           thumb={this.props.item.avatarUrl}
           onClick={this.jumpToDetail.bind(this)}
         />
@@ -39,6 +38,9 @@ export default class Index extends Component {
     }
   }
   onLoad(){
+    let a=[];
+    let count=0;
+    let allcount=0;
     wx.request({
       url:'https://qizong007.top/message/receivers',
       method:'GET',
@@ -46,11 +48,34 @@ export default class Index extends Component {
         userId:getGlobalData('userid'),
       },
       success:res=>{
+        allcount=res.data.data.length;
         console.log(res);
-
-        this.setState({
-          contactList:res.data.data
-        });
+        new Promise((resolve,reject)=>{
+          res.data.data.forEach((item)=>{
+            wx.request({
+              url:'https://qizong007.top/user/getInfo',
+              method:'GET',
+              data:{
+                userId:item.receiverId
+              },
+              success:res=>{
+                count++;
+                a.push({
+                  receiverId:res.data.data.userId,
+                  avatarUrl:res.data.data.avatarUrl,
+                  userName:res.data.data.userName,
+                });
+                if(count===allcount)  resolve();
+              }
+            })          
+          })
+          // resolve();
+        }).then(()=>{
+            this.setState({
+              contactList:a
+            })          
+        }
+        )
       }
     })
   }
@@ -91,6 +116,7 @@ export default class Index extends Component {
             })
           }
         </AtList>
+        <View className='nothing'></View>
         <AtTabBar
           fixed
           tabList={[

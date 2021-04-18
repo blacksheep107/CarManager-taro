@@ -129,35 +129,42 @@ export default class Index extends Component {
         success:res=>{
           console.log(res);
           // repaint
-          let that=this;
-          wx.request({
-            url:'https://qizong007.top/vehicle/findById',
-            method:'GET',
-            data:{
-              vehicleId:res.data.data.vehicleId
-            },
-            success:res=>{
-              new Promise(
-                function(resolve,reject){
-                  let newinfo=getGlobalData('carInfo');
-                  newinfo.push({
-                    vehicleid:res.data.data.vehicleId,
-                    type:res.data.data.type==0?'汽车':'电动车',
-                    licensePlate:res.data.data.licensePlate,
-                    color:res.data.data.color,
-                    brand:res.data.data.brand,
-                    pictures:res.data.data.pictures
-                  })
-                  setGlobalData('carInfo',newinfo);
-                  resolve();
+          if(res.data.code===5001){
+            wx.showModal({
+              title:'提示',
+              content:'车牌已被注册，请前往反馈',
+              showCancel:false,
+            })
+          }else if(res.data.code===0){
+            wx.request({
+              url:'https://qizong007.top/vehicle/findById',
+              method:'GET',
+              data:{
+                vehicleId:res.data.data.vehicleId
+              },
+              success:res=>{
+                new Promise(
+                  function(resolve,reject){
+                    let newinfo=getGlobalData('carInfo');
+                    newinfo.push({
+                      vehicleid:res.data.data.vehicleId,
+                      type:res.data.data.type==0?'汽车':'电动车',
+                      licensePlate:res.data.data.licensePlate,
+                      color:res.data.data.color,
+                      brand:res.data.data.brand,
+                      pictures:res.data.data.pictures
+                    })
+                    setGlobalData('carInfo',newinfo);
+                    resolve();
+                  }
+                ).then(
+                  (res)=>{
+                    wx.navigateBack();
+                  }
+                )
                 }
-              ).then(
-                (res)=>{
-                  wx.navigateBack();
-                }
-              )            
-            }
-          })
+            })
+          }
         },
         fail:res=>{
           console.log(res);
