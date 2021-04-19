@@ -13,7 +13,7 @@ export default {
     'pages/findcar/findcar',
     'pages/friend/friend',
     'pages/addfriend/addfriend',
-
+    'pages/feedback/feedback',
     'pages/index/index',
   ],
   window: {

@@ -16,6 +16,15 @@ export default class Index extends Component {
     }
   }
   handleClick (value) {
+    wx.requestSubscribeMessage({
+      tmplIds: ['9ovqmwinU6Rhpgs4mxZtFCZxmtQ2CcPwbomgYUnqcsA'],
+      success (res) { 
+        console.log(res);
+      },
+      fail:res=>{
+        console.log(res);
+      }
+    });
     this.setState({
       current: value
     });

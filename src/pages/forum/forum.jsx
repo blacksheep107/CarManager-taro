@@ -91,7 +91,6 @@ class Comment extends Component{
   }
   submitComment(id){
     // console.log(id);
-    // no empty or all space
     let info=getGlobalData('userInfo');
     wx.request({
       url:'https://qizong007.top/comment/publish',
@@ -106,6 +105,7 @@ class Comment extends Component{
         // console.log(res);
         if(res.data.code===0){
           // success,close,don't know how to repaint
+          // newcomments array, repaint two array
           let temp=this.state.newcomments;
           temp.push({
             commentId:res.data.data.commentId,
@@ -287,7 +287,7 @@ export default class Index extends Component {
   //   this.getTrends();
   // }
   componentDidShow(){
-    this.getTrends();
+    // this.getTrends();
   }
   componentWillMount(){
     this.getTrends();

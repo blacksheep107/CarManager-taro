@@ -37,10 +37,30 @@ export default class Index extends Component {
       contactList:[],
     }
   }
+  requestMessage(item){
+    // console.log(item);
+    return new Promise((resolve,reject)=>{
+      wx.request({
+        url:'https://qizong007.top/user/getInfo',
+        method:'GET',
+        data:{
+          userId:item.receiverId
+        },
+        success:res=>{
+          console.log(res);
+          this.setState({
+            contactList:this.state.contactList.concat({
+              receiverId:res.data.data.userId,
+              avatarUrl:res.data.data.avatarUrl,
+              userName:res.data.data.userName,           
+            })
+          })
+          resolve();
+        }
+      })
+    })
+  }
   onLoad(){
-    let a=[];
-    let count=0;
-    let allcount=0;
     wx.request({
       url:'https://qizong007.top/message/receivers',
       method:'GET',
@@ -48,38 +68,26 @@ export default class Index extends Component {
         userId:getGlobalData('userid'),
       },
       success:res=>{
-        allcount=res.data.data.length;
         console.log(res);
-        new Promise((resolve,reject)=>{
-          res.data.data.forEach((item)=>{
-            wx.request({
-              url:'https://qizong007.top/user/getInfo',
-              method:'GET',
-              data:{
-                userId:item.receiverId
-              },
-              success:res=>{
-                count++;
-                a.push({
-                  receiverId:res.data.data.userId,
-                  avatarUrl:res.data.data.avatarUrl,
-                  userName:res.data.data.userName,
-                });
-                if(count===allcount)  resolve();
-              }
-            })          
-          })
-          // resolve();
-        }).then(()=>{
-            this.setState({
-              contactList:a
-            })          
-        }
-        )
+        (async ()=>{
+          for(let i=0;i<res.data.data.length;i++){
+            let item=res.data.data[i];
+              await this.requestMessage(item);
+          }
+      })()
       }
     })
   }
   handleClick (value) {
+    wx.requestSubscribeMessage({
+      tmplIds: ['9ovqmwinU6Rhpgs4mxZtFCZxmtQ2CcPwbomgYUnqcsA'],
+      success (res) { 
+        console.log(res);
+      },
+      fail:res=>{
+        console.log(res);
+      }
+    });
     this.setState({
       current: value
     });
@@ -105,6 +113,7 @@ export default class Index extends Component {
     }
   }
   render () {
+    // console.log(this.state.contactList);
     return (
       <View className='index'>
         <AtList>

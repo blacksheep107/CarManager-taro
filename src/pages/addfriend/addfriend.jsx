@@ -19,10 +19,10 @@ export default class Index extends Component {
   }
   find(id){
     wx.request({
-      url:'https://qizong007.top/user/getInfo',
+      url:'https://qizong007.top/user/getInfoByOpenId',
       method:'GET',
       data:{
-        userId:this.state.id
+        openId:this.state.id
       },
       success:res=>{
         console.log(res);
@@ -107,8 +107,8 @@ export default class Index extends Component {
         <View className='find'>
           <AtInput
             name='id'
-            type='number'
-            title='UserId'
+            type='text'
+            title='账号'
             placeholder='输入用户id'
             value={this.state.id}
             onChange={this.findChange.bind(this)}

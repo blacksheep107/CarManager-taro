@@ -17,21 +17,52 @@
   flex-direction: column;
   margin: 20rpx;
   margin-top: 0;
+  word-break: break-all;
 }
 .leftcontentContainer{
   background-color: #f0f0f0;
   border-radius: 0 0.8em 0.8em 0.8em;
   padding: 20rpx;
   margin-top: 10rpx;
+  margin-right: auto;
 }
 .rightcontentContainer{
   background-color: #f0f0f0;
   border-radius: 0.8em 0 0.8em 0.8em;
   padding: 20rpx;
   margin-top: 10rpx;
+  margin-left: auto;
 }
-.content{
+.time{
+  color: #999999;
+  font-size: small;
 }
 .onemessage{
-  margin: 20rpx;
+  display: flex;
+}
+.at-avatar{
+  width: 100rpx;
+  height: 100rpx;
+  color: #FFF;
+  font-size: 40rpx;
+  line-height: 100rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  background: #E5E5E5;
+  -webkit-box-shadow: 0 0 50rpx 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 50rpx 0 rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  min-width: 100rpx;
+}
+.at-avatar--circle{
+  border-radius: 50%;
+  background-clip: border-box;
+  overflow: hidden;
+}
+.bottombar{
+  display: flex;
+  flex-direction: column;
+}
+.name{
+  margin-left: auto;
 }

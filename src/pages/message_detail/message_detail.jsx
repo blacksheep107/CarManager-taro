@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import { AtButton,AtAvatar } from 'taro-ui'
+import { View, Text,Button } from '@tarojs/components'
+import { AtButton,AtAvatar,AtInput,AtModal, AtModalHeader, AtModalContent, AtModalAction,AtTextarea } from 'taro-ui'
 import {setGlobalData,getGlobalData} from '../globalData'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -9,36 +9,147 @@ class Message extends Component{
   constructor(props){
     super(props);
     this.state={
-      
+      isOpened:false,
+      areacontent:'',
     }
   }
+  getTime(d){
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+  }
+  closeModel(e){
+    this.setState({
+      isOpened:false,
+    })
+  }
+  checkEmpty(e){
+    let reg="^[ ]+$";
+    let re=new RegExp(reg);
+    if(re.test(e)||e==''){
+      this.setState({submitDisabled:true});
+    }else{
+      this.setState({submitDisabled:false});
+    }
+  }
+  submitMessage(e){
+    if(this.checkEmpty(e)){
+      wx.showModal({
+        title:'提示',
+        content:'请填写消息！',
+        showCancel:false,
+      });
+    }else{
+      wx.request({
+        url:'https://qizong007.top/message/send',
+        method:'POST',
+        data:{
+          userId:getGlobalData('userid'),
+          receiverId:this.props.item.receiverId,
+          userName:getGlobalData('userInfo').nickName,
+          avatarUrl:getGlobalData('userInfo').avatarUrl,
+          content:this.state.areacontent,
+          isRelative:false,
+          licensePlate:this.props.item.licensePlate,
+          position:this.props.item.position,
+        },
+        success:res=>{
+          console.log(res);
+          if(res.data.code===0){
+            wx.showModal({
+              title:'提示',
+              content:'发送成功',
+              showCancel:false,
+            });
+            this.closeModel();
+            // 设为已读
+            wx.request({
+              url:'https://qizong007.top/message/read',
+              method:'POST',
+              data:{
+                messageId:this.props.item.messageId
+              },
+              success:res=>{
+                console.log(res);
+                if(res.data.code===0){
+                  this.props.changeRead();
+                }
+              }
+            })
+          }else{
+            wx.showModal({
+              title:'提示',
+              content:'发送失败',
+              showCancel:false,
+            })
+          }
+        },
+        fail:res=>{
+          console.log(res);
+          wx.showModal({
+            title:'提示',
+            content:'发送失败',
+            showCancel:false,
+          })
+        }
+      })
+    }
+    // this.closeModel(e);
+    // submit    
+
+  }
+  showModel(e){
+    this.setState({
+      isOpened:true
+    });
+  }
+  areaChange(e){
+    this.setState({
+      areacontent:e
+    });
+  }
   render(){
-    console.log(this.props.item);
+    // console.log(this.props.item);
     return(
-      <View>
+      <View className='onemessage'>
         {
           this.props.item.receiverId===getGlobalData('userid')?
-          <View className='leftmessage'>
-            <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
-            <View className='nameAndContent'>
-              <Text>{this.props.item.userName}</Text>
-              {/* <Text>{this.props.item.postTime}</Text> */}
-              <View className='leftcontentContainer'>
-                <Text className='content'>
-                  {this.props.item.content}
-                </Text>
-              </View>              
+          <View>
+            <View className='leftmessage'>
+              <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
+              <View className='nameAndContent'>
+                <Text>{this.props.item.userName}</Text>
+                <View className='leftcontentContainer' onClick={this.showModel.bind(this)}>
+                  <Text className='content'>
+                    {this.props.item.content}
+                  </Text>
+                </View>
+                <View className='bottombar'>
+                  <Text className='time'>{this.props.item.hasRead?'已处理':'未处理'}</Text>
+                  <Text className='time'>{this.getTime(new Date(this.props.item.postTime))}</Text>        
+                </View>
+              </View>
             </View>
+            <AtModal isOpened={this.state.isOpened}>
+            <AtModalHeader>回复 {this.props.item.userName}</AtModalHeader>
+              <AtTextarea
+                value={this.state.areacontent}
+                onChange={this.areaChange.bind(this)}
+              />
+              <AtModalAction> 
+                <Button onClick={this.closeModel.bind(this)}>取消</Button>
+                <Button onClick={this.submitMessage.bind(this)}>发送</Button>
+              </AtModalAction>
+            </AtModal>
           </View>
           :
           <View className='rightmessage'>
           <View className='nameAndContent'>
-            <Text>{this.props.item.userName}</Text>
+            <Text className='name'>{this.props.item.userName}</Text>
             <View className='rightcontentContainer'>
               <Text className='content'>
                 {this.props.item.content}
               </Text>
-            </View>              
+            </View>
+            <Text className='time'>{this.getTime(new Date(this.props.item.postTime))}</Text>
           </View>
           <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
         </View>
@@ -103,6 +214,22 @@ export default class Index extends Component {
           }
         })
       },
+    });
+    setTimeout(()=>{
+      wx.pageScrollTo({
+        scrollTop: 9999
+      })    
+    },2000);
+  }
+  changeRead(item){
+    for (let i=0;i<this.state.messages.length;i++){
+      if(this.state.messages[i].messageId===item.messageId){
+        this.state.messages[i].hasRead=true;
+        break;
+      }
+    }
+    this.setState({
+      messages
     })
   }
   render () {
@@ -111,7 +238,7 @@ export default class Index extends Component {
         {
           this.state.messages.map((item)=>{
             return (
-              <Message item={item} />
+              <Message item={item} changeRead={this.changeRead.bind(this,item)} />
             )
           })
         }

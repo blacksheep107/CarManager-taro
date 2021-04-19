@@ -90,7 +90,9 @@ export default class Index extends Component {
               successToast:true,
               sendTrend:'',
             });
-            wx.navigateBack();
+            wx.redirectTo({
+              url:'../forum/forum'
+            });
           }else{
             // fail
             this.setState({errorToast:true})

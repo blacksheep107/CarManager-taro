@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { View, Text, Image } from '@tarojs/components'
-import { AtDivider,AtTabBar,AtIcon } from 'taro-ui'
+import { AtDivider,AtTabBar,AtIcon,AtToast } from 'taro-ui'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './personal_center.scss'
 import {setGlobalData,getGlobalData} from '../globalData'
@@ -16,6 +16,8 @@ export default class Index extends Component {
       isnewUser:false,
       hasUserInfo: false,
       canIUseGetUserProfile: false,
+      openid:'',
+      isOpened:false,
     }
   }
   handleClick (value) {
@@ -91,6 +93,9 @@ export default class Index extends Component {
         this.getCarInfo();
         console.log('get openid');
         console.log(res);
+        this.setState({
+          openid:res.data.data.openId
+        });
       }
     })
   }
@@ -239,7 +244,21 @@ export default class Index extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
-
+  copyid(){
+    wx.setClipboardData({
+      data:this.state.openid,
+      success:res=>{
+        this.setState({
+          isOpened:true,
+        })
+      }
+    })
+  }
+  feedback(){
+    wx.navigateTo({
+      url:'../feedback/feedback'
+    })
+  }
   render () {
     return (
       <View className='at-col'>
@@ -251,16 +270,18 @@ export default class Index extends Component {
             <View class="namemessage">
               <open-data type="userNickName"></open-data>      
             </View>
-            <View>
-              <Text>UserId: {this.state.userId}</Text>
+            <View onClick={this.copyid.bind(this)} className='userid'>
+              <Text>{this.state.openid}</Text>
+              <View>
+                <AtIcon value='tag' size='20' color='#346fc2'></AtIcon>
+                <Text className='copy'>点击复制账号</Text>
+              </View>
             </View>
           </View>
-          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>
         <AtDivider />
-        
         <View class="user_information" onClick={this.getInfo.bind(this)}>
-        <AtIcon className="avator" value='settings' size='60' color='#78A4FA'></AtIcon>
+        <AtIcon className="icon" value='settings' size='60' color='#78A4FA'></AtIcon>
           {/* <Image class="avator" src={carmanagement}></Image> */}
           <View class="user_text">
             <Text class="namemessage">车辆管理</Text>
@@ -270,11 +291,20 @@ export default class Index extends Component {
         </View>
         <AtDivider />
         <View class="user_information" onClick={this.getFriend.bind(this)}>
-        <AtIcon className="avator" value='phone' size='60' color='#78A4FA'></AtIcon>
+          <AtIcon className="icon" value='phone' size='60' color='#78A4FA'></AtIcon>
           {/* <Image class="avator" src={carmanagement}></Image> */}
           <View class="user_text">
             <Text class="namemessage">好友管理</Text>
             <Text class="id">点击添加好友</Text>
+          </View>
+          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
+        </View>
+        <AtDivider />
+        <View class="user_information" onClick={this.feedback.bind(this)}>
+          <AtIcon className="icon" value='external-link' size='60' color='#78A4FA'></AtIcon>
+          <View class="user_text">
+            <Text class="namemessage">反馈</Text>
+            <Text class="id">向我们反馈</Text>
           </View>
           <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
         </View>

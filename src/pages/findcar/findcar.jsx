@@ -107,7 +107,7 @@ export default class Index extends Component {
       success:res=>{
         console.log(res);
         this.setState({
-          address:res.address
+          address:res.name
         });
       }
     })

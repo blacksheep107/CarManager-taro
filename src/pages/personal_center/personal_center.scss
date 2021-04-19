@@ -50,9 +50,26 @@
   border: 2px solid #fff;
   margin: 10px 20px;
 }
+.icon{
+  position: relative;
+  overflow: hidden;
+  width: 120rpx;
+  height: 120rpx;
+  border: 2px solid #fff;
+  margin: 10px 20px;
+}
 .inpic{
   position: relative;
   margin-left: auto;
   margin-right: 60px;
 
+}
+.userid{
+  display: flex;
+  flex-direction: column;
+  color: #78a4fa;
+  margin-top: 10rpx;
+}
+.copy{
+  margin-left: 10rpx;
 }
