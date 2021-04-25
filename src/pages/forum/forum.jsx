@@ -378,7 +378,15 @@ export default class Index extends Component {
       url:'../add_trend/add_trend',
     })
   }
+  onPullDownRefresh(){
+    // 下拉刷新
+    this.setState({
+      count:0
+    });
+    this.componentWillMount();
+  }
   onReachBottom(){
+    // 上拉加载
     wx.request({
       url:'https://qizong007.top/post/getTen',
       method:'GET',
