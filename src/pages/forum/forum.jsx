@@ -384,6 +384,7 @@ export default class Index extends Component {
       count:0
     });
     this.componentWillMount();
+    wx.stopPullDownRefresh();
   }
   onReachBottom(){
     // 上拉加载
