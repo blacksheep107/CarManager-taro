@@ -129,6 +129,8 @@ export default class Index extends Component {
           value={this.state.phoneNumber}
           onChange={this.phonechange.bind(this)}
         />
+        <View className='img'>
+          <Text>反馈图片</Text>
           <AtImagePicker
             multiple
             count={3}
@@ -136,7 +138,8 @@ export default class Index extends Component {
             onChange={this.picchange.bind(this)}
             onFail={this.onFail.bind(this)}
             onImageClick={this.onImageClick.bind(this)}
-          />
+          />          
+        </View>
         <AtButton type='primary' onClick={this.submit.bind(this)}>提交反馈</AtButton>
       </View>
     )

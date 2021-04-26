@@ -136,7 +136,9 @@ class Comment extends Component{
             value={this.state.sendComment}
             onChange={this.sendCommentChange.bind(this,this.props.item.postId)}
           />
-          <AtButton type='secondary' onClick={this.submitComment.bind(this,this.props.item.postId)} disabled={this.state.commentDisabled}>发表</AtButton>
+          <AtButton type='secondary' onClick={this.submitComment.bind(this,this.props.item.postId)} disabled={this.state.commentDisabled}>
+            <AtIcon value='message' size='25' color='#78A4FA' className="comment"></AtIcon>
+          </AtButton>
         </View>        
       </View>
 
@@ -151,7 +153,6 @@ class Trend extends Component{
     }
   }
   onDelete(id){
-    // console.log(id);
     wx.showModal({
       title:'提示',
       content:'确定删除这条动态？',
@@ -187,11 +188,9 @@ class Trend extends Component{
       urls:this.props.item.pictures,
     })
   }
-  // commentChange(comments){
-  //   this.setState({
-
-  //   })
-  // }
+  getTime(d){
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+  }
   render(){
     let that=this;
     return (
@@ -199,7 +198,13 @@ class Trend extends Component{
         {!this.state.isHide&&
           <AtCard
           className='card'
-          extra={this.props.item.postTime}
+          extra={this.getTime(new Date(this.props.item.postTime))}
+          extraStyle={
+            {
+              'color':'darkgray',
+              'font-size':'small',
+            }
+          }
           title={this.props.item.userName}
           thumb={this.props.item.avatarUrl}
         >
@@ -219,12 +224,12 @@ class Trend extends Component{
             }
           </View>
           <View className="bottomBar">
-            {this.props.userid==this.props.item.userId&&
-            <AtIcon value='trash' size='25' color='#78A4FA' className="delete"
-            onClick={this.onDelete.bind(this,that.props.item.postId)}
-            ></AtIcon>}
-            <AtIcon value='heart' size='25' color='#78A4FA' className="like"></AtIcon>
-            <AtIcon value='message' size='25' color='#78A4FA' className="comment"></AtIcon>
+            <View className='trash'>
+              {this.props.userid==this.props.item.userId&&
+                <AtIcon value='trash' size='25' color='#78A4FA' className="delete"
+                onClick={this.onDelete.bind(that.props.item.postId)}
+                ></AtIcon>}              
+            </View>
           </View>
           <Comment item={this.props.item} />
           {/* 有滚动穿透问题+键盘遮盖输入框问题，不会解决，非常无语 */}

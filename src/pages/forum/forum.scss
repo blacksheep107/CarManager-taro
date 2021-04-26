@@ -43,7 +43,6 @@
 .comment{
   max-height: 50rpx;
   max-width: 50rpx;
-  margin-left: 20px;
 }
 .content{
   display: flex;
@@ -82,7 +81,7 @@
   display: block;
 }
 .commentname{
-  color: blue;
+  color: #346FC2;
   font-size: small;
 }
 .commentcontent{
@@ -116,3 +115,28 @@
 .nothing{
   height: 100rpx;
 }
+.time{
+  margin-right: auto;
+  color: darkgray;
+  margin-top: 10rpx;
+}
+.trash{
+  margin-left: auto;
+}
+.at-card__header-extra{
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -webkit-box-flex: 0;
+  margin-left: 24rpx;
+  color: #2C405A;
+  font-size: 28rpx;
+  max-width: fit-content;
+}
+// .at-card__header-title.at-card__header-extra{
+//   overflow: hidden;
+//   -o-text-overflow: ellipsis;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+//   line-height: 1.5;
+// }
