@@ -1,0 +1,26 @@
+.info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 50rpx;
+  font-size: larger;
+  color: cornflowerblue;
+}
+.onecar{
+  width: 200rpx;
+  height: 200rpx;
+}
+.car{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  // grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 20px;
+  min-width: max-content;
+}
+
+.cars{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}

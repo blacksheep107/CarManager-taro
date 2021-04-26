@@ -58,12 +58,20 @@ class Friend extends Component{
       }
     })
   }
+  jumpFrienddetail(){
+    console.log(this.props);
+    wx.navigateTo({
+      url:'../friend_detail/friend_detail?receiverId='+this.props.item.id+'&userName='+this.props.item.userName,
+    })
+  }
   render(){
     return(
       this.state.isdelete?null:
         <View className='onefriend'>
-          <AtAvatar circle image={this.props.item.avatarUrl}></AtAvatar>
-          <Text className='nickname'>{this.props.item.userName}</Text>
+          <View className='avatarandname' onClick={this.jumpFrienddetail.bind(this)}>
+            <AtAvatar circle image={this.props.item.avatarUrl}></AtAvatar>
+            <Text className='nickname'>{this.props.item.userName}</Text>            
+          </View>
           <AtIcon value='close' size='25' color='#78A4FA' className='deleteicon' onClick={this.deleteFriend.bind(this)}></AtIcon>
         </View>
     )

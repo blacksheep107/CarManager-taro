@@ -14,6 +14,7 @@ export default {
     'pages/friend/friend',
     'pages/addfriend/addfriend',
     'pages/feedback/feedback',
+    'pages/friend_detail/friend_detail',
     'pages/index/index',
   ],
   window: {
