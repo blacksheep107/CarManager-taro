@@ -11,13 +11,15 @@
   flex-wrap: nowrap;
   margin: 20rpx;
   margin-left: auto;
+
 }
 .nameAndContent{
   display: flex;
   flex-direction: column;
   margin: 20rpx;
-  margin-top: 0;
+  margin-top: 5rpx;
   word-break: break-all;
+  margin-bottom: 0;
 }
 .leftcontentContainer{
   background-color: #f0f0f0;
@@ -34,8 +36,13 @@
   margin-left: auto;
 }
 .time{
-  color: #999999;
+  margin-left: 6rpx;
+}
+.righttime{
   font-size: small;
+  color: #999999;
+  margin-left: auto;
+  margin-top: 8rpx;
 }
 .onemessage{
   display: flex;
@@ -61,8 +68,20 @@
 }
 .bottombar{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  margin-top: 8rpx;
+  font-size: small;
+  color: #999999;
 }
 .name{
   margin-left: auto;
+}
+.centerTime{
+  text-align: center;
+  font-size: small;
+  color: #999999;
+  margin: -6rpx;
+}
+.index{
+  margin-top: 40rpx;
 }

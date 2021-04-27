@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { View, Text,Image, Icon,ScrollView } from '@tarojs/components'
+import { View, Text,Image, Icon,ScrollView,Button, Input,Label } from '@tarojs/components'
 import { AtButton,AtList, AtIcon,AtCard,AtTabBar,AtFloatLayout,AtFab,AtTextarea,AtImagePicker,AtToast, AtInput,AtDivider } from 'taro-ui'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -128,17 +128,22 @@ class Comment extends Component{
       <View className='inputAndComment'>
         <CommentContent item={this.props.item} newcomments={this.state.newcomments} />
         <View className='commentView'>
-          <AtInput className='commentFixed'
+          <View className='input'>
+            <Label className='label'>评论</Label>
+            <Input placeholder='说点什么吧...' placeholderClass='placeholder'></Input>
+            <Button className='button' onClick={this.submitComment.bind(this,this.props.item.postId)} disabled={this.state.commentDisabled}>
+              <AtIcon className='button' value='message' size='24' color='#78A4FA' className="comment"></AtIcon>
+            </Button>
+          </View>
+          {/* <AtInput className='commentFixed'
             name={this.props.item.postId}
             title='评论'
             type='text'
             placeholder='说点什么吧...'
+            border='false'
             value={this.state.sendComment}
             onChange={this.sendCommentChange.bind(this,this.props.item.postId)}
-          />
-          <AtButton type='secondary' onClick={this.submitComment.bind(this,this.props.item.postId)} disabled={this.state.commentDisabled}>
-            <AtIcon value='message' size='25' color='#78A4FA' className="comment"></AtIcon>
-          </AtButton>
+          /> */}
         </View>        
       </View>
 
@@ -196,54 +201,64 @@ class Trend extends Component{
     return (
       <View>
         {!this.state.isHide&&
-          <AtCard
-          className='card'
-          extra={this.getTime(new Date(this.props.item.postTime))}
-          extraStyle={
-            {
-              'color':'darkgray',
-              'font-size':'small',
-            }
-          }
-          title={this.props.item.userName}
-          thumb={this.props.item.avatarUrl}
-        >
-          <Text className="content">
-            {this.props.item.content}
-          </Text>
-          <View className="imgs">
-            {
-              this.props.item.pictures.map((i)=>{
-                return (
-                  <Image src={i} 
-                  onClick={this.previewImg.bind(this,i)} 
-                  data-src={i}
-                  className="oneImage" />
-                )
-              })
-            }
-          </View>
-          <View className="bottomBar">
-            <View className='trash'>
+          <View className='card'>
+            <View className='header'>
+              <Image src={this.props.item.avatarUrl} className='avatar' />
+              <View className='nameAndContent'>
+                <Text>{this.props.item.userName}</Text>
+                <Text className='time'>{this.getTime(new Date(this.props.item.postTime))}</Text>
+              </View>
+              <View className='trash'>
               {this.props.userid==this.props.item.userId&&
-                <AtIcon value='trash' size='25' color='#78A4FA' className="delete"
+                <AtIcon value='trash' size='24' color='#78A4FA' className="delete"
                 onClick={this.onDelete.bind(that.props.item.postId)}
-                ></AtIcon>}              
+                ></AtIcon>}
+              </View>
             </View>
+            <Text className='content'>
+              {this.props.item.content}
+            </Text>
+            <Comment item={this.props.item} />
           </View>
-          <Comment item={this.props.item} />
-          {/* 有滚动穿透问题+键盘遮盖输入框问题，不会解决，非常无语 */}
-          {/* <AtFloatLayout isOpened={this.state.isCommentFloat} title="发表评论">
-            <AtTextarea
-              value={this.state.sendComment}
-              onChange={this.sendCommentChange.bind(this)}
-              maxLength={200}
-              placeholder='说点什么吧...'
-            />
-            <AtButton type='primary' onClick={this.submitComment.bind(this)}
-            disabled={this.state.commentDisabled}>发表</AtButton>
-          </AtFloatLayout> */}
-        </AtCard>
+        //   <AtCard
+        //   className='card'
+        //   extra={this.getTime(new Date(this.props.item.postTime))}
+        //   color='white'
+        //   extraStyle={
+        //     {
+        //       'color':'darkgray',
+        //       'font-size':'small',
+        //     }
+        //   }
+        //   title={this.props.item.userName}
+        //   thumb={this.props.item.avatarUrl}
+        // >
+          // <Text className="content">
+          //   {this.props.item.content}
+          // </Text>
+          // <View className="imgs">
+          //   {
+          //     this.props.item.pictures.map((i)=>{
+          //       return (
+          //         <Image src={i} 
+          //         onClick={this.previewImg.bind(this,i)} 
+          //         data-src={i}
+          //         className="oneImage" />
+          //       )
+          //     })
+          //   }
+          // </View>
+          // <View className="bottomBar">
+          //   <View className='trash'>
+          //     {this.props.userid==this.props.item.userId&&
+          //       <AtIcon value='trash' size='24' color='#78A4FA' className="delete"
+          //       onClick={this.onDelete.bind(that.props.item.postId)}
+          //       ></AtIcon>}              
+          //   </View>
+          // </View>
+          // <Comment item={this.props.item} />
+
+        // </AtCard>
         }
       </View>
     )

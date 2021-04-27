@@ -14,7 +14,12 @@ class Message extends Component{
     }
   }
   getTime(d){
-    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+    return d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+
+    // d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+
+  }
+  getYear(d){
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   }
   closeModel(e){
     this.setState({
@@ -109,52 +114,61 @@ class Message extends Component{
   render(){
     // console.log(this.props.item);
     return(
-      <View className='onemessage'>
-        {
-          this.props.item.receiverId===getGlobalData('userid')?
-          <View>
-            <View className='leftmessage'>
-              <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
-              <View className='nameAndContent'>
-                <Text>{this.props.item.userName}</Text>
-                <View className='leftcontentContainer' onClick={this.showModel.bind(this)}>
-                  <Text className='content'>
-                    {this.props.item.content}
-                  </Text>
-                </View>
-                <View className='bottombar'>
-                  <Text className='time'>{this.props.item.hasRead?'已处理':'未处理'}</Text>
-                  <Text className='time'>{this.getTime(new Date(this.props.item.postTime))}</Text>        
+      <View>
+        <View className='centerTime'>
+          <Text>{this.getYear(new Date(this.props.item.postTime))}</Text>
+        </View>
+        <View className='onemessage'>
+          {
+            this.props.item.receiverId===getGlobalData('userid')?
+            <View>
+              <View className='leftmessage'>
+                <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
+                <View className='nameAndContent'>
+                  {/* <Text>{this.props.item.userName}</Text> */}
+                  <View className='leftcontentContainer' onClick={this.showModel.bind(this)}>
+                    <Text className='content'>
+                      {this.props.item.content}
+                    </Text>
+                  </View>
+                  <View className='bottombar'>
+                    <Text>{this.props.item.hasRead?'已处理':'未处理'}</Text>
+                    <Text className='time'>{this.getTime(new Date(this.props.item.postTime))}</Text>        
+                  </View>
                 </View>
               </View>
+              <AtModal isOpened={this.state.isOpened}>
+              <AtModalHeader>回复 {this.props.item.userName}</AtModalHeader>
+                <AtTextarea
+                  value={this.state.areacontent}
+                  onChange={this.areaChange.bind(this)}
+                />
+                <AtModalAction> 
+                  <Button onClick={this.closeModel.bind(this)}>取消</Button>
+                  <Button onClick={this.submitMessage.bind(this)}>发送</Button>
+                </AtModalAction>
+              </AtModal>
             </View>
-            <AtModal isOpened={this.state.isOpened}>
-            <AtModalHeader>回复 {this.props.item.userName}</AtModalHeader>
-              <AtTextarea
-                value={this.state.areacontent}
-                onChange={this.areaChange.bind(this)}
-              />
-              <AtModalAction> 
-                <Button onClick={this.closeModel.bind(this)}>取消</Button>
-                <Button onClick={this.submitMessage.bind(this)}>发送</Button>
-              </AtModalAction>
-            </AtModal>
-          </View>
-          :
-          <View className='rightmessage'>
-          <View className='nameAndContent'>
-            <Text className='name'>{this.props.item.userName}</Text>
-            <View className='rightcontentContainer'>
-              <Text className='content'>
-                {this.props.item.content}
-              </Text>
+            :
+            <View className='rightmessage'>
+            <View className='nameAndContent'>
+              {/* <Text className='name'>{this.props.item.userName}</Text> */}
+              <View className='rightcontentContainer'>
+                <Text className='content'>
+                  {this.props.item.content}
+                </Text>
+              </View>
+              {/* <View className='bottombar'>
+
+              </View> */}
+              <Text className='righttime'>{this.getTime(new Date(this.props.item.postTime))}</Text>
             </View>
-            <Text className='time'>{this.getTime(new Date(this.props.item.postTime))}</Text>
+            <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
           </View>
-          <AtAvatar circle image={this.props.item.avatarUrl} className="avatar" />
+          }
         </View>
-        }
       </View>
+
     )
   }
 }

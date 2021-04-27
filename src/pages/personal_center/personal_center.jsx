@@ -301,7 +301,7 @@ export default class Index extends Component {
         </View>
         <AtDivider />
         <View class="user_information" onClick={this.feedback.bind(this)}>
-          <AtIcon className="icon" value='external-link' size='60' color='#78A4FA'></AtIcon>
+          <AtIcon className="icon" value='help' size='60' color='#78A4FA'></AtIcon>
           <View class="user_text">
             <Text class="namemessage">反馈</Text>
             <Text class="id">向我们反馈</Text>
