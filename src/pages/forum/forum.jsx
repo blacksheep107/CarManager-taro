@@ -20,7 +20,7 @@ class CommentContent extends Component{
     return(
       <View className='commentBlock'>
         {allcomment.length>0&&
-          <AtList>
+          <View>
             {
               allcomment.map((onecomment)=>{
                 return(
@@ -33,7 +33,7 @@ class CommentContent extends Component{
                 )
               })
             }
-          </AtList>
+          </View>
         }
       </View>
     )
@@ -55,10 +55,10 @@ class Comment extends Component{
       sendComment:'',
     });
   }
-  sendCommentChange(id,e){
+  sendCommentChange(e){
     // e is content
-    // console.log(id+' '+e);
-    this.state.sendComment=e;
+    // console.log(e.detail.value);
+    this.state.sendComment=e.detail.value;
     let reg="^[ ]+$";
     let re=new RegExp(reg);
     if(re.test(e)||e==''){
@@ -90,7 +90,7 @@ class Comment extends Component{
     })
   }
   submitComment(id){
-    // console.log(id);
+    console.log(id);
     let info=getGlobalData('userInfo');
     wx.request({
       url:'https://qizong007.top/comment/publish',
@@ -102,7 +102,7 @@ class Comment extends Component{
         content:this.state.sendComment, // 评论内容
       },
       success:res=>{
-        // console.log(res);
+        console.log(res);
         if(res.data.code===0){
           // success,close,don't know how to repaint
           // newcomments array, repaint two array
@@ -129,11 +129,19 @@ class Comment extends Component{
         <CommentContent item={this.props.item} newcomments={this.state.newcomments} />
         <View className='commentView'>
           <View className='input'>
-            <Label className='label'>评论</Label>
-            <Input placeholder='说点什么吧...' placeholderClass='placeholder'></Input>
-            <Button className='button' onClick={this.submitComment.bind(this,this.props.item.postId)} disabled={this.state.commentDisabled}>
-              <AtIcon className='button' value='message' size='24' color='#78A4FA' className="comment"></AtIcon>
-            </Button>
+            <View className='left'>
+              <Label className='label'>评论</Label>
+              {/* <View className='line' style='margin-left:16rpx'></View>                */}
+            </View>
+            <Input style='margin-left:16rpx;' placeholder='说点什么吧...' placeholderClass='placeholder' onInput={this.sendCommentChange.bind(this)} value={this.state.sendComment}></Input>
+            <View className='button' onClick={
+              !this.state.commentDisabled?
+              this.submitComment.bind(this,this.props.item.postId):null
+              }>
+              {/* <View className='line' style='margin-right:16rpx'></View>                */}
+              <Text className='send'>发送</Text>
+              {/* <AtIcon className='button' value='message' size='24' color='#78A4FA' className="comment"></AtIcon> */}
+            </View>
           </View>
           {/* <AtInput className='commentFixed'
             name={this.props.item.postId}
@@ -211,13 +219,25 @@ class Trend extends Component{
               <View className='trash'>
               {this.props.userid==this.props.item.userId&&
                 <AtIcon value='trash' size='24' color='#78A4FA' className="delete"
-                onClick={this.onDelete.bind(that.props.item.postId)}
+                onClick={this.onDelete.bind(this,this.props.item.postId)}
                 ></AtIcon>}
               </View>
             </View>
             <Text className='content'>
               {this.props.item.content}
             </Text>
+            <View className="imgs">
+            {
+              this.props.item.pictures.map((i)=>{
+                return (
+                  <Image src={i} 
+                  onClick={this.previewImg.bind(this,i)} 
+                  data-src={i}
+                  className="oneImage" />
+                )
+              })
+            }
+            </View>
             <Comment item={this.props.item} />
           </View>
         //   <AtCard
@@ -260,6 +280,7 @@ class Trend extends Component{
 
         // </AtCard>
         }
+        {/* <View style="background:linear-gradient(to left,#FFFFFF,#b6b6b6,#FFFFFF);height:1px;"></View> */}
       </View>
     )
   }

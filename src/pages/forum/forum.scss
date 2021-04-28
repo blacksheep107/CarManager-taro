@@ -57,11 +57,11 @@
 //   max-width: 50rpx;
 //   margin-right: auto;
 // }
-// .fab{
-//   position: fixed;
-//   bottom: 170rpx;
-//   right: 35rpx;
-// }
+.fab{
+  position: fixed;
+  bottom: 170rpx;
+  right: 35rpx;
+}
 // // .at-list{
 // //   background-color: #FFF;
 // //   position: relative;
@@ -75,6 +75,7 @@
 .onecomment{
   display: flex;
   flex-direction: row;
+
 }
 .commentReal{
   display: block;
@@ -95,16 +96,20 @@
 .commentView{
   display: flex;
   flex-direction: row;
-  margin-top: 6rpx;
+  margin-top: 16rpx;
+  border-radius: 12rpx;
+  background: #F5F5F5;
+  height:72rpx;
 }
-// .imgs{
-//   display: grid;
-//   grid-template-columns: 1fr 1fr 1fr;
-// }
-// .oneImage{
-//   height: 200rpx;
-//   width: 200rpx;
-// }
+.imgs{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 16rpx;
+}
+.oneImage{
+  height: 200rpx;
+  width: 200rpx;
+}
 // .nothing{
 //   height: 100rpx;
 // }
@@ -133,23 +138,35 @@
 // //   white-space: nowrap;
 // //   line-height: 1.5;
 // // }
-button{
+.button{
   color: white;
   border-color: white;
-  background-color: white;
-  border-radius: 50%;
-  margin-left: auto;
+  background-color: rgb(242, 242, 247);
+  position: absolute;
+  right: 26rpx;
+  border-radius: 12rpx;
+  padding: 16rpx;
 }
 .placeholder{
   text-align: center;
 }
 .label{
   text-align: center;
+  color: #C0C0C0;
+  border-style: none solid none none;
+  border-width: 1rpx;
+  border-color: gray;
+  padding-right: 16rpx;
+  margin-left: 16rpx;
 }
 .card{
   display: flex;
   flex-direction: column;
   margin: 20rpx;
+}
+.left{
+  display: flex;
+  flex-direction: row;
 }
 .header{
   display: flex;
@@ -183,7 +200,20 @@ button{
   margin-left: auto;
 }
 .input{
-  display: grid;
-  grid-template-columns: 1fr 6fr 1fr;
+  display: flex;
+  flex-direction: row;
+  // grid-template-columns: 3fr 10fr 8fr;
   align-items: center;
+}
+.line{
+  float: left;
+  width: 4rpx;
+  height: 80rpx;
+  background: linear-gradient(to top, #e0e0e0, #c0c0c0, #a1a1a1,#c0c0c0,#e0e0e0, transparent);
+}
+.send{
+  color:#346FC2;
+  font-size:medium;
+  // position: absolute;
+  // right: 20rpx;
 }
