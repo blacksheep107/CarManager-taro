@@ -119,6 +119,7 @@ export default class Index extends Component {
           onImageClick={this.onImageClick.bind(this)}
         />
         <AtButton 
+          className='submitbutton'
           type='primary'
           onClick={this.submitTrend.bind(this)}
           disabled={this.state.submitDisabled}

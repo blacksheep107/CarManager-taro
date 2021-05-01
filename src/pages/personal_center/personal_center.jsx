@@ -262,7 +262,7 @@ export default class Index extends Component {
   render () {
     return (
       <View className='at-col'>
-        <View class="user_information">
+        <View class="user_info">
           <View class="avator">
             <open-data type="userAvatarUrl"></open-data>
           </View>
@@ -271,42 +271,42 @@ export default class Index extends Component {
               <open-data type="userNickName"></open-data>      
             </View>
             <View onClick={this.copyid.bind(this)} className='userid'>
-              <Text>{this.state.openid}</Text>
+              {/* <Text>{this.state.openid}</Text> */}
               <View>
-                <AtIcon value='tag' size='20' color='#346fc2'></AtIcon>
+                <AtIcon value='tag' size='15' color='#346fc2'></AtIcon>
                 <Text className='copy'>点击复制账号</Text>
               </View>
             </View>
           </View>
         </View>
-        <AtDivider />
+        {/* <AtDivider /> */}
         <View class="user_information" onClick={this.getInfo.bind(this)}>
-        <AtIcon className="icon" value='settings' size='60' color='#78A4FA'></AtIcon>
+        <AtIcon className="icon" value='settings' size='40' color='#78A4FA'></AtIcon>
           {/* <Image class="avator" src={carmanagement}></Image> */}
           <View class="user_text">
             <Text class="namemessage">车辆管理</Text>
             <Text class="id">嘟嘟嘟——</Text>
           </View>
-          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
+          <AtIcon className="inpic" value='chevron-right' size='25' color='#78A4FA'></AtIcon>
         </View>
-        <AtDivider />
+        {/* <AtDivider /> */}
         <View class="user_information" onClick={this.getFriend.bind(this)}>
-          <AtIcon className="icon" value='phone' size='60' color='#78A4FA'></AtIcon>
+          <AtIcon className="icon" value='phone' size='40' color='#78A4FA'></AtIcon>
           {/* <Image class="avator" src={carmanagement}></Image> */}
           <View class="user_text">
             <Text class="namemessage">好友管理</Text>
             <Text class="id">点击添加好友</Text>
           </View>
-          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
+          <AtIcon className="inpic" value='chevron-right' size='25' color='#78A4FA'></AtIcon>
         </View>
-        <AtDivider />
+        {/* <AtDivider /> */}
         <View class="user_information" onClick={this.feedback.bind(this)}>
-          <AtIcon className="icon" value='help' size='60' color='#78A4FA'></AtIcon>
+          <AtIcon className="icon" value='help' size='40' color='#78A4FA'></AtIcon>
           <View class="user_text">
             <Text class="namemessage">反馈</Text>
             <Text class="id">向我们反馈</Text>
           </View>
-          <AtIcon className="inpic" value='chevron-right' size='50' color='#78A4FA'></AtIcon>
+          <AtIcon className="inpic" value='chevron-right' size='25' color='#78A4FA'></AtIcon>
         </View>
         <AtTabBar
           fixed

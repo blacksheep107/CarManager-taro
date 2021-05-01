@@ -185,6 +185,9 @@ class Trend extends Component{
                 this.setState({
                   isHide:true
                 });
+                wx.showToast({
+                  title:'删除成功！'
+                })
               }
             }
           })
@@ -280,7 +283,7 @@ class Trend extends Component{
 
         // </AtCard>
         }
-        {/* <View style="background:linear-gradient(to left,#FFFFFF,#b6b6b6,#FFFFFF);height:1px;"></View> */}
+        <View style="background:linear-gradient(to left,#FFFFFF,#b6b6b6,#FFFFFF);height:1px;"></View>
       </View>
     )
   }

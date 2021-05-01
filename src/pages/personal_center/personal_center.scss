@@ -1,9 +1,25 @@
 /* pages/personal_center/personal_center.wxss */
+page{
+  background: #F5F5F5;
+}
 .user_information{
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  margin-top: 20px;
+  // margin-top: 20px;
+  padding: 20rpx;
+  // margin-top: 16rpx;
+  background-color: white;
+}
+.user_info{
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  // margin-top: 20px;
+  padding: 20rpx;
+  margin-top: 10rpx;
+  margin-bottom: 16rpx;
+  background-color: white;
 }
 .user_text{
   display: flex;
@@ -53,8 +69,8 @@
 .icon{
   position: relative;
   overflow: hidden;
-  width: 120rpx;
-  height: 120rpx;
+  // width: 120rpx;
+  // height: 120rpx;
   border: 2px solid #fff;
   margin: 10px 20px;
 }
