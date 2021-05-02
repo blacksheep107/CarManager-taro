@@ -4,7 +4,9 @@ import { AtDivider,AtTabBar,AtIcon,AtToast } from 'taro-ui'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './personal_center.scss'
 import {setGlobalData,getGlobalData} from '../globalData'
-import carmanagement from "/images/carmanagement.png"
+import settings from "/images/settings.png"
+import feedback from "/images/feedback.png"
+import friend from "/images/friend.png"
 
 export default class Index extends Component {
   constructor () {
@@ -266,8 +268,8 @@ export default class Index extends Component {
           <View class="avator">
             <open-data type="userAvatarUrl"></open-data>
           </View>
-          <View class="user_text">
-            <View class="namemessage">
+          <View class="_text">
+            <View class="name">
               <open-data type="userNickName"></open-data>      
             </View>
             <View onClick={this.copyid.bind(this)} className='userid'>
@@ -281,33 +283,37 @@ export default class Index extends Component {
         </View>
         {/* <AtDivider /> */}
         <View class="user_information" onClick={this.getInfo.bind(this)}>
-        <AtIcon className="icon" value='settings' size='40' color='#78A4FA'></AtIcon>
-          {/* <Image class="avator" src={carmanagement}></Image> */}
+        {/* <AtIcon className="icon" value='settings' size='40' color='#78A4FA'></AtIcon> */}
+          <Image className="avatar" src={settings}></Image>
           <View class="user_text">
             <Text class="namemessage">车辆管理</Text>
             <Text class="id">嘟嘟嘟——</Text>
           </View>
           <AtIcon className="inpic" value='chevron-right' size='25' color='#78A4FA'></AtIcon>
         </View>
+        <View className='divider'></View>
         {/* <AtDivider /> */}
         <View class="user_information" onClick={this.getFriend.bind(this)}>
-          <AtIcon className="icon" value='phone' size='40' color='#78A4FA'></AtIcon>
-          {/* <Image class="avator" src={carmanagement}></Image> */}
+          {/* <AtIcon className="icon" value='phone' size='40' color='#78A4FA'></AtIcon> */}
+          <Image className="avatar" src={friend}></Image>
           <View class="user_text">
             <Text class="namemessage">好友管理</Text>
             <Text class="id">点击添加好友</Text>
           </View>
           <AtIcon className="inpic" value='chevron-right' size='25' color='#78A4FA'></AtIcon>
         </View>
+        <View className='divider'></View>
         {/* <AtDivider /> */}
         <View class="user_information" onClick={this.feedback.bind(this)}>
-          <AtIcon className="icon" value='help' size='40' color='#78A4FA'></AtIcon>
+          {/* <AtIcon className="icon" value='help' size='40' color='#78A4FA'></AtIcon> */}
+          <Image className="avatar" src={feedback}></Image>
           <View class="user_text">
             <Text class="namemessage">反馈</Text>
             <Text class="id">向我们反馈</Text>
           </View>
           <AtIcon className="inpic" value='chevron-right' size='25' color='#78A4FA'></AtIcon>
         </View>
+        <View className='divider'></View>
         <AtTabBar
           fixed
           tabList={[

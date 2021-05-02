@@ -21,6 +21,11 @@ page{
   margin-bottom: 16rpx;
   background-color: white;
 }
+._text{
+  display: flex;
+  flex-flow: column wrap;
+  color: #346FC2;
+}
 .user_text{
   display: flex;
   flex-flow: column wrap;
@@ -38,10 +43,19 @@ page{
   margin-top: 20px;
   margin-bottom: 20px;
 }
+.divider{
+  height: 2rpx;
+  color: gray;
+}
+.name{
+  font-weight: bold;
+  font-size: large;
+  align-self: center;;
+}
 .namemessage{
   font-weight: bold;
   font-size: large;
-  width: 100px;
+  align-self: auto;
 }
 .id{
   font-size: medium;
@@ -77,7 +91,7 @@ page{
 .inpic{
   position: relative;
   margin-left: auto;
-  margin-right: 60px;
+  margin-right: 24rpx;
 
 }
 .userid{
@@ -88,4 +102,8 @@ page{
 }
 .copy{
   margin-left: 10rpx;
+}
+.avatar{
+  height: 80rpx;
+  width: 80rpx;
 }

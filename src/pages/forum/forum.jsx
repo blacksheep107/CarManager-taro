@@ -425,7 +425,8 @@ export default class Index extends Component {
   onPullDownRefresh(){
     // 下拉刷新
     this.setState({
-      count:0
+      count:0,
+      trends:[],
     });
     this.componentWillMount();
     wx.stopPullDownRefresh();

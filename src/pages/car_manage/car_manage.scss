@@ -12,9 +12,58 @@
 .cars{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  margin-bottom: 20px;
+  margin-bottom: 16rpx;
+  justify-items: center;
 }
 .onecar{
   width: 200rpx;
   height: 200rpx;
+}
+.card{
+  display: flex;
+  flex-direction: column;
+  margin: 10rpx;
+  border-radius: 24rpx;
+  padding: 10rpx;
+  margin-top: 20rpx;
+  background-color: white;
+}
+page{
+  background: #F5F5F5;
+}
+.header{
+  display: flex;
+  flex-flow: row nowrap;
+  max-height: 80rpx;
+  align-items: center;
+}
+.rightinfo{
+  margin-left: auto;
+}
+.hoverbutton{
+  color: #6188C6;
+}
+.type{
+  height: 40rpx;
+  width: 60rpx;
+  margin: 6rpx;
+}
+.bottom{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  padding-top: 10rpx;
+  padding-bottom: 10rpx;
+}
+.line{
+  height: 3rpx;
+  background-color: #6188C6;
+  margin: 10rpx;
+  margin-bottom: 16rpx;
+}
+.verticalline{
+  width: 4rpx;
+  background-color: #f5f5f5;
+}
+.button{
+  text-align: center;
 }

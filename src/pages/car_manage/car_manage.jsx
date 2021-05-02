@@ -1,11 +1,11 @@
 import { Component } from 'react'
-import { View, Text,Image } from '@tarojs/components'
+import { View, Text,Image,Button } from '@tarojs/components'
 import { AtButton,AtCard,AtList, AtListItem } from 'taro-ui'
 import VirtualList from '@tarojs/components/virtual-list'
 import {setGlobalData,getGlobalData} from '../globalData'
 import nocar from '/images/nocar.png'
-import car from '/images/car.png'
-import ebike from '/images/ebike.png'
+import cartype from '/images/car_type.png'
+import ebike from '/images/e_bike.png'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './car_manage.scss'
@@ -95,18 +95,25 @@ export default class Index extends Component {
           {
             datalength==0?
             <Image src={nocar}></Image> :
-            <AtList>
+            <View>
               {data.map((item)=>{
                 return (
-                  <AtCard
-                    note={item.type}
-                    extra={item.brand+'-'+item.color}
-                    title={item.licensePlate}
-                  >
-                    {
+                  <View className='card'>
+                    <View className='header'>
+                      <Image className='type'
+                      src={
+                        item.type=='汽车'?
+                        cartype:ebike
+                      } />
+                      <Text>{item.licensePlate}</Text>
+                      <Text className='rightinfo'>{item.brand+'-'+item.color}</Text>
+                    </View>
+                    <View className='line'></View>
+                    <View className='content'>
+                      {
                       JSON.stringify(item.pictures)==='[]'?
-                      <Text>没图</Text> :
-                      <View className="cars">
+                        <Text>没图</Text> :
+                        <View className="cars">
                         {
                           item.pictures.map((carpic)=>{
                             return (
@@ -114,16 +121,41 @@ export default class Index extends Component {
                             )
                           })
                         }
-                      </View>
-                    }
-                    <View className="at-row">
-                      <AtButton size="small" onClick={this.updateCar.bind(this,item)}>修改车辆</AtButton>
-                      <AtButton size="small" onClick={this.deleteCar.bind(this,item)}>删除车辆</AtButton>                      
+                        </View>
+                      }
                     </View>
-                  </AtCard>
+                    <View className='bottom'>
+                      <View className='button' hoverClass='hoverbutton' onClick={this.updateCar.bind(this,item)}>修改</View>
+                      <View className='verticalline'></View>
+                      <View className='button' hoverClass='hoverbutton' onClick={this.deleteCar.bind(this,item)}>删除</View>
+                    </View>
+                  </View>
+                  // <AtCard
+                  //   note={item.type}
+                  //   extra={item.brand+'-'+item.color}
+                  //   title={item.licensePlate}
+                  // >
+                  //   {
+                  //     JSON.stringify(item.pictures)==='[]'?
+                  //     <Text>没图</Text> :
+                  //     <View className="cars">
+                  //       {
+                  //         item.pictures.map((carpic)=>{
+                  //           return (
+                  //             <Image className="onecar" src={carpic.picture} />
+                  //           )
+                  //         })
+                  //       }
+                  //     </View>
+                  //   }
+                  //   <View className="at-row">
+                  //     <AtButton size="small" onClick={this.updateCar.bind(this,item)}>修改车辆</AtButton>
+                  //     <AtButton size="small" onClick={this.deleteCar.bind(this,item)}>删除车辆</AtButton>                      
+                  //   </View>
+                  // </AtCard>
                 )
               })}
-            </AtList>
+            </View>
           }
           <AtButton type="primary" size="small" className='myButton' onClick={this.addCar.bind(this)}>添加车辆</AtButton>
         </View>
