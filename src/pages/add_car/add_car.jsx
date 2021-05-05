@@ -186,7 +186,7 @@ export default class Index extends Component {
   }
   render () {
     return (
-      <AtForm onSubmit={this.onSubmit.bind(this)}>
+      <AtForm onSubmit={this.onSubmit.bind(this)} className='form'>
         <View className='at-article'>
           <View className='at-article__h1'>
             选择车辆类型
