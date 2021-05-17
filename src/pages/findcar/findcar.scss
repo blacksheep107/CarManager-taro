@@ -1,0 +1,33 @@
+.button{
+  margin:16rpx;
+}
+.carnum{
+  border-bottom: 1px solid #f5f5f5;
+  margin: 26rpx;
+}
+.icon{
+  margin-right: 80rpx;
+  margin-left: 40rpx;
+}
+.choosepos{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: -14rpx;
+  margin-bottom: 20rpx;
+}
+.input{
+  border-bottom: 1px solid #f5f5f5;
+  width: -webkit-fill-available;
+  margin-right: 20rpx;
+}
+.tarea{
+  border: none;
+}
+.line{
+  height: 4rpx;
+  background-color: #f5f5f5;
+  margin: 20rpx;
+  margin-bottom: 36rpx;
+  margin-top: 36rpx;
+}

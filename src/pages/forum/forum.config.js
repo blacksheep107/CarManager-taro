@@ -1,6 +1,6 @@
 export default{
   "usingComponents": {},
-  "navigationBarTitleText": "论坛",
+  "navigationBarTitleText": "趋势",
   "navigationBarTextStyle": "white",
   "backgroundTextStyle":'dark',
   "navigationBarBackgroundColor": "#78A4FA",

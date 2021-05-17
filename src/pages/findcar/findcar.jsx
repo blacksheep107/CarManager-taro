@@ -26,7 +26,65 @@ export default class Index extends Component {
       carnum
     })
   }
+  postUser(carOwnerId,isRelative){
+    wx.request({
+      url:'https://qizong007.top/message/send',
+      method:'POST',
+      data:{
+        userId:getGlobalData('userid'),
+        receiverId:carOwnerId,
+        userName:getGlobalData('userInfo').nickName,
+        avatarUrl:getGlobalData('userInfo').avatarUrl,
+        content:this.state.content,
+        isRelative:isRelative,
+        licensePlate:this.state.carnum,
+        position:this.state.address,
+      },
+      success:res=>{
+        console.log(res);
+        console.log(getGlobalData('userInfo').avatarUrl)
+        if(res.data.code==0){
+          wx.showModal({
+            title:'发送成功',
+            content:'已给车主及其好友发送订阅消息',
+            showCancel:false,
+          })
+          if(!isRelative){
+            wx.navigateBack();
+          }
+        }else if(!isRelative){
+          wx.showModal({
+            title:'发送失败',
+            content:'该车车主可能未授权订阅消息',
+            showCancel:false,
+          })
+        }
+      },
+      fail:res=>{
+        console.log(res);
+      }
+    });
+  }
   findCar(){
+    if(this.state.carnum==''){
+      wx.showModal({
+        title:'提示',
+        content:'请填写车牌号！',
+        showCancel:false,
+      });
+    }else if(this.state.address==''){
+      wx.showModal({
+        title:'提示',
+        content:'请填写地址!',
+        showCancel:false
+      })
+    }else if(this.state.content==''){
+      wx.showModal({
+        title:'提示',
+        content:'请填写消息内容！',
+        showCancel:false
+      })
+    }
     wx.request({
       url:'https://qizong007.top/vehicle/search',
       method:'GET',
@@ -40,52 +98,22 @@ export default class Index extends Component {
           // 有这个车牌
           this.setState({
             owner:res.data.data.carOwnerId
-          })
-          console.log(getGlobalData('userInfo'));
-          console.log(this.state);
-          wx.request({
-            url:'https://qizong007.top/message/send',
-            method:'POST',
-            data:{
-              userId:getGlobalData('userid'),
-              receiverId:res.data.data.carOwnerId,
-              userName:getGlobalData('userInfo').nickName,
-              avatarUrl:getGlobalData('userInfo').avatarUrl,
-              content:this.state.content,
-              isRelative:false,
-              licensePlate:this.state.carnum,
-              position:this.state.address,
-              // userId:8,
-              // receiverId:8,
-              // userName:'BLACKSHEEP',
-              // avatarUrl:getGlobalData('userInfo').avatarUrl,
-              // content:'死数据, 内容',
-              // isRelative:false,
-              // licensePlate:'苏E05EV8',
-              // position:'死数据',
-            },
-            success:res=>{
-              console.log(res);
-              console.log(getGlobalData('userInfo').avatarUrl)
-              if(res.data.code==0){
-                wx.showModal({
-                  title:'发送成功',
-                  content:'已给车主发送订阅消息',
-                  showCancel:false,
-                })
-                wx.navigateBack();
-              }else{
-                wx.showModal({
-                  title:'发送失败',
-                  content:'该车车主可能未授权订阅消息',
-                  showCancel:false,
-                })
+          });
+          this.postUser(res.data.data.carOwnerId,false);
+          let rel=getGlobalData('relatives');
+          rel.forEach((item)=>{
+            wx.request({
+              url:'https://qizong007.top/user/getInfo',
+              method:'GET',
+              data:{
+                userId:item
+              },
+              success:res=>{
+                console.log(res);
+                this.postUser(res.data.data.userId,true);
               }
-            },
-            fail:res=>{
-              console.log(res);
-            }
-          })        
+            })
+          })
         }else{
           wx.showModal({
             title:'提示',
@@ -118,17 +146,25 @@ export default class Index extends Component {
         <AtInput
           title='车牌号'
           name='carnum'
+          className='carnum'
+          placeholder='请填写车牌号'
           value={this.state.carnum}
           onChange={this.carnumChange.bind(this)}
         />
-        <AtIcon value='map-pin' size='30' color='#78A4FA' onClick={this.choosePos.bind(this)}></AtIcon>
-        <Text>{this.state.address}</Text>
+        <View className='choosepos'>
+          <AtIcon className='icon' value='map-pin' size='30' color='#78A4FA' onClick={this.choosePos.bind(this)}></AtIcon>
+          <AtInput className='input' name='address' placeholder='点击图标定位'
+          value={this.state.address} />          
+        </View>
+        {/* <Text>{this.state.address}</Text> */}
+        <View className='line'></View>
         <AtTextarea
+          className='tarea'
           value={this.state.content}
           onChange={this.contentChange.bind(this)}
           placeholder='填写车辆问题'
         />
-        <AtButton type='primary' onClick={this.findCar.bind(this)}>发送消息</AtButton>
+        <AtButton className='button' type='primary' onClick={this.findCar.bind(this)}>发送消息</AtButton>
       </View>
     )
   }

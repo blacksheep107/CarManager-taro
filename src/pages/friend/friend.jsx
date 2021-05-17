@@ -86,44 +86,43 @@ export default class Index extends Component {
       current:3
     }
   }
+  requestRele(item){
+    return new Promise(resolve=>{wx.request({
+      url:'https://qizong007.top/user/getInfo',
+      method:'GET',
+      data:{
+        userId:item,
+      },
+      success:res=>{
+        console.log(res);
+        this.setState({
+          items:this.state.items.concat({
+            userName:res.data.data.userName,
+            avatarUrl:res.data.data.avatarUrl,
+            id:res.data.data.userId,            
+          })
+        });
+        // 异步有坑
+        // if(count===this.state.relatives.length) resolve();
+        resolve();
+      },
+      fail:res=>{
+        console.log(res);
+      }
+    })})
+  }
   componentDidShow(){
     this.setState({
       relatives:getGlobalData('relatives')
     });
-    let a=[];
-    let count=0;
-    new Promise((resolve,reject)=>{
-      this.state.relatives.forEach((item)=>{
-        wx.request({
-          url:'https://qizong007.top/user/getInfo',
-          method:'GET',
-          data:{
-            userId:item,
-          },
-          success:res=>{
-            count++;
-            console.log(res);
-            a.push({
-              userName:res.data.data.userName,
-              avatarUrl:res.data.data.avatarUrl,
-              id:res.data.data.userId,
-            });
-            // 异步有坑
-            if(count===this.state.relatives.length) resolve();
-          },
-          fail:res=>{
-            console.log(res);
-          }
-        })
-      })
-      if(count===this.state.relatives.length) resolve();
-    }).then(()=>{
-      console.log(a);
-      this.setState({
-        items:a
-      })
-    }
-    )
+    this.setState({
+      items:[]
+    });
+    (async ()=>{
+      for(let i=0;i<this.state.relatives.length;i++){
+        await this.requestRele(this.state.relatives[i]);
+      }
+    })()
   }
   onLoad(){
     // this.state.relatives.forEach((item)=>{
@@ -200,13 +199,13 @@ export default class Index extends Component {
             )
           })
         }
-        <AtButton type='primary' onClick={this.addFriend.bind(this)}>添加好友</AtButton>
+        <AtButton className='button' type='primary' onClick={this.addFriend.bind(this)}>添加好友</AtButton>
         <AtTabBar
           fixed
           tabList={[
             { title: '找车', iconType: 'camera'},
             { title: '消息', iconType: 'message'},
-            { title: '论坛', iconType: 'streaming' },
+            { title: '趋势', iconType: 'streaming' },
             { title: '我的', iconType: 'user'},
           ]}
           onClick={this.handleClick.bind(this)}

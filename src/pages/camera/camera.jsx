@@ -95,7 +95,7 @@ export default class Index extends Component {
           tabList={[
             { title: '找车', iconType: 'camera'},
             { title: '消息', iconType: 'message'},
-            { title: '论坛', iconType: 'streaming' },
+            { title: '趋势', iconType: 'streaming' },
             { title: '我的', iconType: 'user'},
           ]}
           onClick={this.handleClick.bind(this)}

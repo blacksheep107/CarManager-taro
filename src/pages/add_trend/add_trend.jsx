@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import { AtButton,AtTextarea,AtImagePicker,AtToast } from 'taro-ui'
+import { AtButton,AtTextarea,AtImagePicker,AtToast, AtIcon } from 'taro-ui'
 import {setGlobalData,getGlobalData} from '../globalData'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -107,8 +107,6 @@ export default class Index extends Component {
         <AtTextarea
           value={this.state.sendTrend}
           onChange={this.trendChange.bind(this)}
-          maxLength={200}
-          placeholder='分享新鲜事...'
         />
         <AtImagePicker
           multiple
@@ -123,7 +121,9 @@ export default class Index extends Component {
           type='primary'
           onClick={this.submitTrend.bind(this)}
           disabled={this.state.submitDisabled}
-        >发表</AtButton>
+        >
+          <AtIcon value='share-2' size='30' color='white'></AtIcon>
+        </AtButton>
         <AtToast isOpened={this.state.errorToast} status="error" text="发布失败"></AtToast>
         <AtToast isOpened={this.state.successToast} status="success" text="发布成功"></AtToast>
       </View>

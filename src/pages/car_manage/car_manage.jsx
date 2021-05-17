@@ -130,29 +130,6 @@ export default class Index extends Component {
                       <View className='button' hoverClass='hoverbutton' onClick={this.deleteCar.bind(this,item)}>删除</View>
                     </View>
                   </View>
-                  // <AtCard
-                  //   note={item.type}
-                  //   extra={item.brand+'-'+item.color}
-                  //   title={item.licensePlate}
-                  // >
-                  //   {
-                  //     JSON.stringify(item.pictures)==='[]'?
-                  //     <Text>没图</Text> :
-                  //     <View className="cars">
-                  //       {
-                  //         item.pictures.map((carpic)=>{
-                  //           return (
-                  //             <Image className="onecar" src={carpic.picture} />
-                  //           )
-                  //         })
-                  //       }
-                  //     </View>
-                  //   }
-                  //   <View className="at-row">
-                  //     <AtButton size="small" onClick={this.updateCar.bind(this,item)}>修改车辆</AtButton>
-                  //     <AtButton size="small" onClick={this.deleteCar.bind(this,item)}>删除车辆</AtButton>                      
-                  //   </View>
-                  // </AtCard>
                 )
               })}
             </View>

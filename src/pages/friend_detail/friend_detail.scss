@@ -24,3 +24,49 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
+.card{
+  display: flex;
+  flex-direction: column;
+  margin: 18rpx;
+  border-radius: 24rpx;
+  padding: 10rpx;
+  margin-top: 28rpx;
+  background-color: white;
+  box-shadow: 12rpx 12rpx 12rpx #c0c0c0;
+}
+.header{
+  display: flex;
+  flex-flow: row nowrap;
+  max-height: 80rpx;
+  align-items: center;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+}
+.type{
+  height: 40rpx;
+  width: 60rpx;
+  margin: 6rpx;
+}
+.rightinfo{
+  margin-left: auto;
+}
+.line{
+  height: 3rpx;
+  background-color: #6188C6;
+  margin: 20rpx;
+  margin-bottom: 36rpx;
+  margin-top: 12rpx;
+}
+.content{
+  margin-bottom: 12rpx;
+}
+.cars{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 16rpx;
+  justify-items: center;
+}
+.onecar{
+  width: 200rpx;
+  height: 200rpx;
+}
