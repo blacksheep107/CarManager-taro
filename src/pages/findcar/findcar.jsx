@@ -140,6 +140,11 @@ export default class Index extends Component {
       }
     })
   }
+  addressChange(e){
+    this.setState({
+      address:e
+    })
+  }
   render () {
     return (
       <View className='index'>
@@ -154,12 +159,13 @@ export default class Index extends Component {
         <View className='choosepos'>
           <AtIcon className='icon' value='map-pin' size='30' color='#78A4FA' onClick={this.choosePos.bind(this)}></AtIcon>
           <AtInput className='input' name='address' placeholder='点击图标定位'
-          value={this.state.address} />          
+          value={this.state.address} onChange={this.addressChange.bind(this)} />
         </View>
         {/* <Text>{this.state.address}</Text> */}
         <View className='line'></View>
         <AtTextarea
           className='tarea'
+          name='tarea'
           value={this.state.content}
           onChange={this.contentChange.bind(this)}
           placeholder='填写车辆问题'
