@@ -14,6 +14,8 @@ export default class Index extends Component {
       owner:0,// 车主
       content:'',
       address:'',
+      latitude:null,
+      longitude:null,
     }
   }
   onLoad(options){
@@ -39,18 +41,22 @@ export default class Index extends Component {
         isRelative:isRelative,
         licensePlate:this.state.carnum,
         position:this.state.address,
+        latitude:this.state.latitude,
+        longitude:this.state.longitude,
       },
       success:res=>{
         console.log(res);
         console.log(getGlobalData('userInfo').avatarUrl)
         if(res.data.code==0){
-          wx.showModal({
-            title:'发送成功',
-            content:'已给车主及其好友发送订阅消息',
-            showCancel:false,
-          })
           if(!isRelative){
-            wx.navigateBack();
+            wx.showModal({
+              title:'发送成功',
+              content:'已给车主及其好友发送订阅消息',
+              showCancel:false,
+              success:res=>{
+                wx.navigateBack();  
+              }
+            })
           }
         }else if(!isRelative){
           wx.showModal({
@@ -135,7 +141,9 @@ export default class Index extends Component {
       success:res=>{
         console.log(res);
         this.setState({
-          address:res.name
+          address:res.name,
+          longitude:res.longitude,
+          latitude:res.latitude
         });
       }
     })

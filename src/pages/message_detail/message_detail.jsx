@@ -43,6 +43,7 @@ class Message extends Component{
         showCancel:false,
       });
     }else{
+      console.log(getGlobalData('userInfo'));
       wx.request({
         url:'https://qizong007.top/message/send',
         method:'POST',
@@ -53,12 +54,24 @@ class Message extends Component{
           avatarUrl:getGlobalData('userInfo').avatarUrl,
           content:this.state.areacontent,
           isRelative:false,
-          licensePlate:this.props.item.licensePlate,
-          position:this.props.item.position,
+          licensePlate:'回复',
+          position:'回复消息',
         },
         success:res=>{
           console.log(res);
           if(res.data.code===0){
+            // let temp={
+            //   messageId:res.data.data.messageId,
+            //   userId:getGlobalData('userid'),
+            //   receiverId:this.props.item.receiverId,
+            //   userName:getGlobalData('userInfo').nickName,
+            //   avatarUrl:getGlobalData('userInfo').avatarUrl,
+            //   content:this.state.areacontent,
+            //   isRelative:false,
+            //   licensePlate:'0',
+            //   position:'回复消息',
+            // }
+            // this.props.changeRead(temp,this.props.item.receiverId);
             wx.showModal({
               title:'提示',
               content:'发送成功',
@@ -74,9 +87,6 @@ class Message extends Component{
               },
               success:res=>{
                 console.log(res);
-                if(res.data.code===0){
-                  this.props.changeRead();
-                }
               }
             })
           }else{
@@ -235,16 +245,16 @@ export default class Index extends Component {
       })    
     },2000);
   }
-  changeRead(item){
+  changeRead(temp,id){
     for (let i=0;i<this.state.messages.length;i++){
-      if(this.state.messages[i].messageId===item.messageId){
+      if(this.state.messages[i].messageId===id){
         this.state.messages[i].hasRead=true;
         break;
       }
     }
     this.setState({
-      messages
-    })
+      messages:this.state.messages.concat(temp)
+    });
   }
   render () {
     return (
