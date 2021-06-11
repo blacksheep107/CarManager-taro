@@ -135,6 +135,12 @@ export default class Index extends Component {
               content:'车牌已被注册，请前往反馈',
               showCancel:false,
             })
+          }else if(res.data.code===5002){
+            wx.showModal({
+              title:'提示',
+              content:'你只能添加4种车辆！',
+              showCancel:false,
+            })
           }else if(res.data.code===0){
             wx.request({
               url:'https://qizong007.top/vehicle/findById',

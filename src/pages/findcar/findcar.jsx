@@ -29,6 +29,7 @@ export default class Index extends Component {
     })
   }
   postUser(carOwnerId,isRelative){
+    console.log(this.state.latitude);
     wx.request({
       url:'https://qizong007.top/message/send',
       method:'POST',

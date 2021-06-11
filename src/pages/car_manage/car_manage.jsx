@@ -102,8 +102,7 @@ export default class Index extends Component {
                     <View className='header'>
                       <Image className='type'
                       src={
-                        item.type=='汽车'?
-                        cartype:ebike
+                        item.type=='汽车'?cartype:ebike
                       } />
                       <Text>{item.licensePlate}</Text>
                       <Text className='rightinfo'>{item.brand+'-'+item.color}</Text>
@@ -112,7 +111,7 @@ export default class Index extends Component {
                     <View className='content'>
                       {
                       JSON.stringify(item.pictures)==='[]'?
-                        <Text>没图</Text> :
+                        <Text>暂无图片</Text> :
                         <View className="cars">
                         {
                           item.pictures.map((carpic)=>{

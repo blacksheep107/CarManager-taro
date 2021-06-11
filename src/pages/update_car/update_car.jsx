@@ -21,7 +21,7 @@ export default class Index extends Component {
     this.state={
       vehicleid:0,
       licensePlate:'',
-      type:0,
+      type:null,
       brand:'',
       color:'',
       images:[],
@@ -240,6 +240,10 @@ export default class Index extends Component {
   onImageClick (index, file) {
     console.log(index, file)
   }
+  typeChange(value){
+    this.setState({type:value});
+    console.log(this.state.type);
+  }
   render () {
     return (
       <AtForm onSubmit={this.onSubmit.bind(this)}>
@@ -248,6 +252,14 @@ export default class Index extends Component {
             修改车辆信息
           </View>
         </View>
+        <AtRadio
+          options={[
+            {label:'汽车',value:0},
+            {label:'电动车',value:1}
+          ]}
+          value={this.state.type}
+          required="required"
+          onClick={this.typeChange.bind(this)} />
           <AtInput
           name="brand"
           title="品牌"

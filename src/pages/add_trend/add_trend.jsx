@@ -122,7 +122,7 @@ export default class Index extends Component {
           onClick={this.submitTrend.bind(this)}
           disabled={this.state.submitDisabled}
         >
-          <AtIcon value='share-2' size='30' color='white'></AtIcon>
+          <AtIcon value='money' size='30' color='white'></AtIcon>
         </AtButton>
         <AtToast isOpened={this.state.errorToast} status="error" text="发布失败"></AtToast>
         <AtToast isOpened={this.state.successToast} status="success" text="发布成功"></AtToast>

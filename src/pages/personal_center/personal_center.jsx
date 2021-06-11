@@ -152,7 +152,7 @@ export default class Index extends Component {
         },
         success:res=>{
           let type="汽车";
-          if(res.data.data.type==="1")  type="电动车";
+          if(res.data.data.type===1)  type="电动车";
           carInfo.push({
             "vehicleid":item,
             "type":type,
